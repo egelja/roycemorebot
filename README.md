@@ -1,23 +1,7 @@
-<p align="center">
-  <a href="" rel="noopener">
- <img width=200px height=200px src="https://i0.wp.com/roycemoreschool.org/wp-content/uploads/2019/03/cropped-Screen-Shot-2019-02-15-at-12.46.45-PM.png" alt="Project logo"></a>
-</p>
+# RoycemoreBot
+A bot for the Roycemore Discord server.
 
-<h3 align="center">Roycemore Bot</h3>
-
-<div align="center">
-
-![Bitbucket open issues](https://img.shields.io/bitbucket/issues-raw/NinoMaruszewski/roycemorebot?style=for-the-badge)
-![Bitbucket open pull requests](https://img.shields.io/bitbucket/pr-raw/NinoMaruszewski/roycemorebot?style=for-the-badge)
-[![License](https://img.shields.io/badge/License-MIT-brightgreen?style=for-the-badge)](./LICENSE)
-
-</div>
-
----
-
-<p align="center"> A bot for the Roycemore Discord server.
-    <br>
-</p>
+![Bitbucket open issues](https://img.shields.io/bitbucket/issues-raw/NinoMaruszewski/roycemorebot?style=for-the-badge) ![Bitbucket open pull requests](https://img.shields.io/bitbucket/pr-raw/NinoMaruszewski/roycemorebot?style=for-the-badge) [![License](https://img.shields.io/badge/License-MIT-brightgreen?style=for-the-badge)](./LICENSE)
 
 ## Table of Contents
 
