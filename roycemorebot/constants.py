@@ -1,8 +1,88 @@
+import json
 import logging
 import os
+from pathlib import Path
 
 log = logging.getLogger(__name__)
 
-TOKEN = os.environ["BOT_TOKEN"]
+if Path("config.json").exists():
+    log.info("Found `config.json`, loading constants from it.")
+    with open("config.json", "r") as f:
+        _CONFIG_JSON = json.load(f)
+else:
+    with open("config-default.json", "r") as f:
+        _CONFIG_JSON = json.load(f)
 
+
+class JSONGetter(type):
+    """
+    Implements a custom metaclass used for accessing configuration data by simply accessing class attributes.
+
+    Supports getting configuration from up to two levels
+    of nested configuration through `section` and `subsection`.
+
+    Example Usage:
+        # config.json
+        {
+            "bot": {
+                "prefixes": {
+                    "dm": "",
+                    "guild": "!"
+                }
+            }
+        }
+
+        # config.py
+        class Prefixes(metaclass=JSONGetter):
+            section = "bot"
+            subsection = "prefixes"
+
+        # Usage in Python code
+        from config import Prefixes
+        def get_prefix(bot, message):
+            if isinstance(message.channel, PrivateChannel):
+                return Prefixes.direct_message
+            return Prefixes.guild
+    """
+
+    subsection = None
+
+    def __getattr__(cls, name: str):
+        name = name.lower()
+
+        try:
+            if cls.subsection is not None:
+                return _CONFIG_JSON[cls.section][cls.subsection][name]
+            return _CONFIG_JSON[cls.section][name]
+        except KeyError:
+            dotted_path = ".".join(
+                (cls.section, cls.subsection, name)
+                if cls.subsection is not None
+                else (cls.section, name)
+            )
+            log.critical(
+                f"Tried accessing configuration variable at `{dotted_path}`, but it could not be found."
+            )
+            raise
+
+    def __getitem__(cls, name: str):
+        return cls.__getattr__(name)
+
+    def __iter__(cls):
+        """Return generator of key: value pairs of current constants class' config values."""
+        for name in cls.__annotations__:
+            yield name, getattr(cls, name)
+
+
+# Environment constants
+TOKEN = os.environ["BOT_TOKEN"]
 DEBUG_MODE = True if os.environ["DEBUG"] is not None else False
+
+
+# JSON constants
+class Bot(metaclass=JSONGetter):
+    """Bot specific attributes."""
+
+    section = "bot"
+
+    prefix: str
