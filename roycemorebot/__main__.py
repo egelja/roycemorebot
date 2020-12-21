@@ -22,7 +22,7 @@ async def on_message(message: Message) -> None:
     if message.author == client.user:
         return
 
-    if message.content.startswith("$hello"):
+    if message.content.startswith(f"{constants.Bot.prefix}hello"):
         await message.channel.send("Hello!")
 
 
