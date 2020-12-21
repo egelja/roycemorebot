@@ -5,14 +5,14 @@ A bot for the Roycemore Discord server.
 
 ## Table of Contents
 
-- [About](#about)
-- [Getting Started](#getting_started)
+- [About](#About)
+- [Getting Started](#Getting-Started)
 - [Usage](#usage)
-- [Built Using](#built_using)
+- [Deployment](#deployment)
+- [Built Using](#Built-Using)
+- [Authors](#authors)
 - [TODO](./TODO.md)
 - [Contributing](./CONTRIBUTING.md)
-- [Authors](#authors)
-- [Acknowledgments](#acknowledgement)
 
 ## About
 
@@ -66,6 +66,6 @@ You can use [PM2](https://pm2.keymetrics.io/) to deploy it. If you have a better
 - [Discord.py](https://discordpy.readthedocs.io/en/latest/) - Discord API interface
 - [SQLite3](https://sqlite.org/index.html) - Database
 
-## Authors <a name = "authors"></a>
+## Authors
 
 - [@NinoMaruszewski](https://bitbucket.org/NinoMaruszewski/) - Idea & Initial work
