@@ -1,8 +1,9 @@
+from datetime import datetime
 import logging
 import os
 
-from discord.ext import commands
 import discord
+from discord.ext import commands
 
 from roycemorebot import constants
 
@@ -33,6 +34,7 @@ bot = CogLoggingBot(
     intents=intents,
     activity=discord.Activity(type=discord.ActivityType.watching, name="$help"),
 )
+bot.start_time = datetime.utcnow()
 
 
 # Message when bot is ready

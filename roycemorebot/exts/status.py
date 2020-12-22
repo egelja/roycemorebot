@@ -19,9 +19,9 @@ class Status(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-    @commands.command()
+    @commands.command(aliases=["latency"])
     async def ping(self, ctx: commands.Context) -> None:
-        """Send the latency of the bot."""
+        """View the latency of the bot."""
         raw_bot_latency = (
             datetime.utcnow() - ctx.message.created_at
         ).total_seconds() * 1000
@@ -41,9 +41,18 @@ class Status(commands.Cog):
 
         await ctx.send(embed=embed)
 
+    @commands.command(aliases=["ut"])
+    async def uptime(self, ctx: commands.Context) -> None:
+        """View the uptime of the bot."""
+        uptime = datetime.utcnow() - self.bot.start_time
+        days = uptime.days
+        hours, rem = divmod(uptime.seconds, 3600)
+        minutes, seconds = divmod(rem, 60)
+        await ctx.send(f"I've been online for {days} day(s), {hours} hour(s), {minutes} minute(s), and {seconds} second(s).")
+
+    @commands.command(aliases=["reboot"])
     @commands.guild_only()
     @commands.has_any_role(Roles.bot_team_role, Roles.admin_role)
-    @commands.command()
     async def restart(self, ctx: commands.Context, delay: int = 0) -> None:
         """Restart the bot after a certain delay (in seconds)."""
         if delay != 0:
