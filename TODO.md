@@ -1,5 +1,5 @@
 # TODO List
-1. Uptime
+1. ~~Uptime~~ DONE!
 2. ~~Restart~~ DONE!
 3. Autorole
 4. Mod commands
