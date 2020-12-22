@@ -26,4 +26,4 @@ async def on_message(message: Message) -> None:
         await message.channel.send("Hello!")
 
 
-client.run(constants.TOKEN)
+client.run(constants.Bot.bot_token)

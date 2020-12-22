@@ -52,8 +52,17 @@ class JSONGetter(type):
 
         try:
             if cls.subsection is not None:
-                return _CONFIG_JSON[cls.section][cls.subsection][name]
-            return _CONFIG_JSON[cls.section][name]
+                item = _CONFIG_JSON[cls.section][cls.subsection][name]
+                if item == "!ENV":
+                    return os.environ[name.upper()]
+                else:
+                    return item
+            else:
+                item = _CONFIG_JSON[cls.section][name]
+                if item == "!ENV":
+                    return os.environ[name.upper()]
+                else:
+                    return item
         except KeyError:
             dotted_path = ".".join(
                 (cls.section, cls.subsection, name)
@@ -75,7 +84,6 @@ class JSONGetter(type):
 
 
 # Environment constants
-TOKEN = os.environ["BOT_TOKEN"]
 DEBUG_MODE = True if os.environ["DEBUG"] is not None else False
 
 
@@ -86,3 +94,4 @@ class Bot(metaclass=JSONGetter):
     section = "bot"
 
     prefix: str
+    bot_token: str
