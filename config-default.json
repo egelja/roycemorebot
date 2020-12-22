@@ -10,7 +10,16 @@
             "bot_team_role": 789869191138246657
         },
         "channels": {
-            "roycemorebot_commands": 790600801583235112
+            "roycemorebot_commands": 790600801583235112,
+            "bot_log": 790600881003429908
+        }
+    },
+    "style": {
+        "emoji": {
+            "ok": ":+1:",
+            "warning": ":warning:",
+            "no": ":x:",
+            "green_check": ":white_check_mark:"
         }
     }
 }

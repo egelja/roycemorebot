@@ -31,7 +31,10 @@ bot = CogLoggingBot(command_prefix=constants.Bot.prefix)
 @bot.event
 async def on_ready() -> None:
     """Message that the bot is ready."""
-    log.info(f"We have logged in as {bot.user}")
+    log.info(f"Logged in as {bot.user}")
+
+    channel = bot.get_channel(constants.Channels.bot_log)
+    await channel.send(f"{constants.Emoji.green_check} Connected!")
 
 
 # Load cogs
