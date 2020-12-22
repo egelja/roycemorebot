@@ -1,29 +1,39 @@
 import logging
 
-import discord
-from discord import Message
+from discord.ext import commands
 
 from roycemorebot import constants
-
-client = discord.Client()
 
 log = logging.getLogger(__name__)
 
 
-@client.event
+# Change the bot class to log adding/removing cogs:
+class CogLoggingBot(commands.Bot):
+    """Subclass of `discord.ext.commands.Bot` to log adding and removing cogs."""
+
+    def add_cog(self, cog: commands.Cog) -> None:
+        """Add a cog and log it."""
+        super().add_cog(cog)
+        log.info(f"Cog loaded: {cog.qualified_name}")
+
+    def remove_cog(self, name: str) -> None:
+        """Remove a cog and log it."""
+        super().remove_cog(name)
+        log.info(f"Cog unloaded: {name}")
+
+
+bot = CogLoggingBot(command_prefix=constants.Bot.prefix)
+
+
+@bot.event
 async def on_ready() -> None:
     """Message that the bot is ready."""
-    log.info("We have logged in as {0.user}".format(client))
+    log.info("We have logged in as {0.user}".format(bot))
 
 
-@client.event
-async def on_message(message: Message) -> None:
-    """Message responder."""
-    if message.author == client.user:
-        return
+@bot.command()
+async def hello(ctx: commands.Context) -> None:
+    """Responder to `hello` message."""
+    await ctx.send("Hello!")
 
-    if message.content.startswith(f"{constants.Bot.prefix}hello"):
-        await message.channel.send("Hello!")
-
-
-client.run(constants.Bot.bot_token)
+bot.run(constants.Bot.bot_token)
