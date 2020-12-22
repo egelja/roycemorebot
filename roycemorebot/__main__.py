@@ -2,6 +2,7 @@ import logging
 import os
 
 from discord.ext import commands
+import discord
 
 from roycemorebot import constants
 
@@ -24,7 +25,14 @@ class CogLoggingBot(commands.Bot):
 
 
 # Create bot
-bot = CogLoggingBot(command_prefix=constants.Bot.prefix)
+intents = discord.Intents.default()
+intents.typing = False
+intents.members = True
+bot = CogLoggingBot(
+    command_prefix=constants.Bot.prefix,
+    intents=intents,
+    activity=discord.Activity(type=discord.ActivityType.watching, name="$help"),
+)
 
 
 # Message when bot is ready
