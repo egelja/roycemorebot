@@ -1,6 +1,6 @@
 # TODO List
-1. Uptime
-2. Restart
+1. ~~Uptime~~ DONE!
+2. ~~Restart~~ DONE!
 3. Autorole
 4. Mod commands
 5. Infraction commands/storage

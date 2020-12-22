@@ -95,3 +95,36 @@ class Bot(metaclass=JSONGetter):
 
     prefix: str
     bot_token: str
+
+
+class Roles(metaclass=JSONGetter):
+    """Roles from the guild of the bot."""
+
+    section = "guild"
+    subsection = "roles"
+
+    admin_role: int
+    mod_role: int
+    bot_team_role: int
+
+
+class Channels(metaclass=JSONGetter):
+    """Channels from the guild of the bot."""
+
+    section = "guild"
+    subsection = "channels"
+
+    roycemorebot_commands: int
+    bot_log: int
+
+
+class Emoji(metaclass=JSONGetter):
+    """Emojis that the bot will use."""
+
+    section = "style"
+    subsection = 'emoji'
+
+    ok: str
+    warning: str
+    no: str
+    green_check: str
