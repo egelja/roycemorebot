@@ -2,5 +2,15 @@
     "bot": {
         "prefix": "$",
         "bot_token": "!ENV"
+    },
+    "guild": {
+        "roles": {
+            "admin_role": 786312173667745812,
+            "mod_role": 786309162828562474,
+            "bot_team_role": 789869191138246657
+        },
+        "channels": {
+            "roycemorebot_commands": 790600801583235112
+        }
     }
 }

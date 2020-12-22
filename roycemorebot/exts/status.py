@@ -1,7 +1,7 @@
 import logging
 from datetime import datetime
 
-from discord import Embed
+from discord import Colour, Embed
 from discord.ext import commands
 
 PRECISION = 3
@@ -21,11 +21,17 @@ class Status(commands.Cog):
         raw_bot_latency = (
             datetime.utcnow() - ctx.message.created_at
         ).total_seconds() * 1000
-        log.info(f"Now: {datetime.utcnow()}, Message creation: {ctx.message.created_at}")
         bot_latency = f"{raw_bot_latency:.{PRECISION}f} ms"
-        api_latency = f"{self.bot.latency * 1000:.{PRECISION}f} ms"
+        raw_api_latency = self.bot.latency * 1000
+        api_latency = f"{raw_api_latency:.{PRECISION}f} ms"
 
-        embed = Embed(title="Pong!")
+        if (raw_bot_latency <= 100 and raw_api_latency <= 100):
+            embed = Embed(title="Pong!", colour=Colour.green())
+        elif (raw_bot_latency <= 250 and raw_api_latency <= 250):
+            embed = Embed(title="Pong!", colour=Colour.orange())
+        else:
+            embed = Embed(title="Pong!", colour=Colour.red())
+
         embed.add_field(name="Bot latency:", value=bot_latency, inline=False)
         embed.add_field(name="Discord API Latency:", value=api_latency, inline=False)
 
