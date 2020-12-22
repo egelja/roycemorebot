@@ -6,7 +6,7 @@ from discord import Colour, Embed
 from discord.ext import commands
 from discord.ext.commands.errors import CommandError, MissingAnyRole, NoPrivateMessage
 
-from roycemorebot.constants import Channels, Emoji, Roles
+from roycemorebot.constants import Channels, Emoji, StaffRoles
 
 PRECISION = 3
 
@@ -48,11 +48,13 @@ class Status(commands.Cog):
         days = uptime.days
         hours, rem = divmod(uptime.seconds, 3600)
         minutes, seconds = divmod(rem, 60)
-        await ctx.send(f"I've been online for {days} day(s), {hours} hour(s), {minutes} minute(s), and {seconds} second(s).")
+        await ctx.send(
+            f"I've been online for {days} day{'s' if days != 1 else ''}, {hours} hour{'s' if hours != 1 else ''}, {minutes} minute{'s' if minutes != 1 else ''}, and {seconds} second{'s' if seconds != 1 else ''}."
+        )
 
     @commands.command(aliases=["reboot"])
     @commands.guild_only()
-    @commands.has_any_role(Roles.bot_team_role, Roles.admin_role)
+    @commands.has_any_role(StaffRoles.bot_team_role, StaffRoles.admin_role)
     async def restart(self, ctx: commands.Context, delay: int = 0) -> None:
         """Restart the bot after a certain delay (in seconds)."""
         if delay != 0:
