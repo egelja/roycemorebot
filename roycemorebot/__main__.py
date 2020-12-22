@@ -41,13 +41,8 @@ for file in os.listdir(os.path.join(".", "roycemorebot", "exts")):
 
 
 @bot.command()
-async def hello(ctx: commands.Context) -> None:
-    """Responder to `hello` message."""
-    await ctx.send("Hello!")
-
-
-@bot.command()
 async def reload(ctx: commands.Context, cog: str) -> None:
+    """Reload a cog."""
     try:
         bot.unload_extension(cog)
         bot.load_extension(cog)
