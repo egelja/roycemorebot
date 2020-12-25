@@ -135,9 +135,13 @@ class Emoji(metaclass=JSONGetter):
     """Emojis that the bot will use."""
 
     section = "style"
-    subsection = 'emoji'
+    subsection = "emoji"
 
     ok: str
     warning: str
     no: str
     green_check: str
+
+
+# Groups
+MOD_ROLES = [StaffRoles.mod_role, StaffRoles.admin_role]
