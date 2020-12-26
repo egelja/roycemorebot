@@ -24,6 +24,9 @@ class ClassRoles(commands.Cog):
         if user != ctx.author and await has_no_roles_check(ctx, *MOD_ROLES):
             await ctx.send("You cannot assign a user other than yourself a class role.")
             return
+        elif user != ctx.author and await has_any_role_check(ctx, *MOD_ROLES):
+            for role in CLASS_ROLES:
+                await user.remove_roles(discord.Object(role), reason="Mod Replacing Class Roles")
 
         # Check if the user is self-roleing and already has a class role.
         if user == ctx.author and await has_any_role_check(ctx, *CLASS_ROLES):
@@ -45,6 +48,9 @@ class ClassRoles(commands.Cog):
         if user != ctx.author and await has_no_roles_check(ctx, *MOD_ROLES):
             await ctx.send("You cannot assign a user other than yourself a class role.")
             return
+        elif user != ctx.author and await has_any_role_check(ctx, *MOD_ROLES):
+            for role in CLASS_ROLES:
+                await user.remove_roles(discord.Object(role), reason="Mod Replacing Class Roles")
 
         # Check if the user is self-roleing and already has a class role.
         if user == ctx.author and await has_any_role_check(ctx, *CLASS_ROLES):
@@ -64,6 +70,9 @@ class ClassRoles(commands.Cog):
         if user != ctx.author and await has_no_roles_check(ctx, *MOD_ROLES):
             await ctx.send("You cannot assign a user other than yourself a class role.")
             return
+        elif user != ctx.author and await has_any_role_check(ctx, *MOD_ROLES):
+            for role in CLASS_ROLES:
+                await user.remove_roles(discord.Object(role), reason="Mod Replacing Class Roles")
 
         # Check if the user is self-roleing and already has a class role.
         if user == ctx.author and await has_any_role_check(ctx, *CLASS_ROLES):
@@ -74,7 +83,7 @@ class ClassRoles(commands.Cog):
 
         await user.add_roles(discord.Object(CRoles.juniors), reason="Class Roles")
 
-    @commands.command(aliases=["sn", "seniors"])
+    @commands.command(aliases=["sr", "seniors"])
     async def senior(self, ctx: commands.Context, user: discord.Member = None) -> None:
         """Give a senior the `Senior` role."""
         if user is None:
@@ -83,6 +92,9 @@ class ClassRoles(commands.Cog):
         if user != ctx.author and await has_no_roles_check(ctx, *MOD_ROLES):
             await ctx.send("You cannot assign a user other than yourself a class role.")
             return
+        elif user != ctx.author and await has_any_role_check(ctx, *MOD_ROLES):
+            for role in CLASS_ROLES:
+                await user.remove_roles(discord.Object(role), reason="Mod Replacing Class Roles")
 
         # Check if the user is self-roleing and already has a class role.
         if user == ctx.author and await has_any_role_check(ctx, *CLASS_ROLES):
@@ -102,6 +114,9 @@ class ClassRoles(commands.Cog):
         if user != ctx.author and await has_no_roles_check(ctx, *MOD_ROLES):
             await ctx.send("You cannot assign a user other than yourself a class role.")
             return
+        elif user != ctx.author and await has_any_role_check(ctx, *MOD_ROLES):
+            for role in CLASS_ROLES:
+                await user.remove_roles(discord.Object(role), reason="Mod Replacing Class Roles")
 
         # Check if the user is self-roleing and already has a class role.
         if user == ctx.author and await has_any_role_check(ctx, *CLASS_ROLES):
