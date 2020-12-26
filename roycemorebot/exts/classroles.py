@@ -26,7 +26,9 @@ class ClassRoles(commands.Cog):
             return
         elif user != ctx.author and await has_any_role_check(ctx, *MOD_ROLES):
             for role in CLASS_ROLES:
-                await user.remove_roles(discord.Object(role), reason="Mod Replacing Class Roles")
+                await user.remove_roles(
+                    discord.Object(role), reason="Mod Replacing Class Roles"
+                )
 
         # Check if the user is self-roleing and already has a class role.
         if user == ctx.author and await has_any_role_check(ctx, *CLASS_ROLES):
@@ -50,7 +52,9 @@ class ClassRoles(commands.Cog):
             return
         elif user != ctx.author and await has_any_role_check(ctx, *MOD_ROLES):
             for role in CLASS_ROLES:
-                await user.remove_roles(discord.Object(role), reason="Mod Replacing Class Roles")
+                await user.remove_roles(
+                    discord.Object(role), reason="Mod Replacing Class Roles"
+                )
 
         # Check if the user is self-roleing and already has a class role.
         if user == ctx.author and await has_any_role_check(ctx, *CLASS_ROLES):
@@ -72,7 +76,9 @@ class ClassRoles(commands.Cog):
             return
         elif user != ctx.author and await has_any_role_check(ctx, *MOD_ROLES):
             for role in CLASS_ROLES:
-                await user.remove_roles(discord.Object(role), reason="Mod Replacing Class Roles")
+                await user.remove_roles(
+                    discord.Object(role), reason="Mod Replacing Class Roles"
+                )
 
         # Check if the user is self-roleing and already has a class role.
         if user == ctx.author and await has_any_role_check(ctx, *CLASS_ROLES):
@@ -94,7 +100,9 @@ class ClassRoles(commands.Cog):
             return
         elif user != ctx.author and await has_any_role_check(ctx, *MOD_ROLES):
             for role in CLASS_ROLES:
-                await user.remove_roles(discord.Object(role), reason="Mod Replacing Class Roles")
+                await user.remove_roles(
+                    discord.Object(role), reason="Mod Replacing Class Roles"
+                )
 
         # Check if the user is self-roleing and already has a class role.
         if user == ctx.author and await has_any_role_check(ctx, *CLASS_ROLES):
@@ -116,7 +124,9 @@ class ClassRoles(commands.Cog):
             return
         elif user != ctx.author and await has_any_role_check(ctx, *MOD_ROLES):
             for role in CLASS_ROLES:
-                await user.remove_roles(discord.Object(role), reason="Mod Replacing Class Roles")
+                await user.remove_roles(
+                    discord.Object(role), reason="Mod Replacing Class Roles"
+                )
 
         # Check if the user is self-roleing and already has a class role.
         if user == ctx.author and await has_any_role_check(ctx, *CLASS_ROLES):
