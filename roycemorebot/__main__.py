@@ -32,7 +32,9 @@ intents.members = True
 bot = CogLoggingBot(
     command_prefix=constants.Bot.prefix,
     intents=intents,
-    activity=discord.Activity(type=discord.ActivityType.watching, name="$help"),
+    activity=discord.Activity(
+        type=discord.ActivityType.watching, name=f"{constants.Bot.prefix}help"
+    ),
 )
 bot.start_time = datetime.utcnow()
 

@@ -145,3 +145,10 @@ class Emoji(metaclass=JSONGetter):
 
 # Groups
 MOD_ROLES = [StaffRoles.mod_role, StaffRoles.admin_role]
+CLASS_ROLES = [
+    ClassRoles.freshmen,
+    ClassRoles.sophomores,
+    ClassRoles.juniors,
+    ClassRoles.seniors,
+    ClassRoles.alumni,
+]

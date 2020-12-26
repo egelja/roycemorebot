@@ -1,9 +1,9 @@
 import discord
 from discord.ext import commands
 
-from roycemorebot.checks import has_no_roles_check
+from roycemorebot.checks import has_any_role_check, has_no_roles_check
+from roycemorebot.constants import CLASS_ROLES, MOD_ROLES
 from roycemorebot.constants import ClassRoles as CRoles
-from roycemorebot.constants import MOD_ROLES
 
 
 class ClassRoles(commands.Cog):
@@ -17,11 +17,19 @@ class ClassRoles(commands.Cog):
         self, ctx: commands.Context, user: discord.Member = None
     ) -> None:
         """Give a freshman the `Freshmen` role."""
+        # Default to the user being the author
         if user is None:
             user = ctx.author
-
-        elif user != ctx.author and await has_no_roles_check(ctx, *MOD_ROLES):
+        # Check if the user is not a mod and they tried to give someone else a role.
+        if user != ctx.author and await has_no_roles_check(ctx, *MOD_ROLES):
             await ctx.send("You cannot assign a user other than yourself a class role.")
+            return
+
+        # Check if the user is self-roleing and already has a class role.
+        if user == ctx.author and await has_any_role_check(ctx, *CLASS_ROLES):
+            await ctx.send(
+                "You already have a class role. If you mistakenly assigned the wrong role, contact <@575252669443211264>."
+            )
             return
 
         await user.add_roles(discord.Object(CRoles.freshmen), reason="Class Roles")
@@ -34,8 +42,15 @@ class ClassRoles(commands.Cog):
         if user is None:
             user = ctx.author
 
-        elif user != ctx.author and await has_no_roles_check(ctx, *MOD_ROLES):
+        if user != ctx.author and await has_no_roles_check(ctx, *MOD_ROLES):
             await ctx.send("You cannot assign a user other than yourself a class role.")
+            return
+
+        # Check if the user is self-roleing and already has a class role.
+        if user == ctx.author and await has_any_role_check(ctx, *CLASS_ROLES):
+            await ctx.send(
+                "You already have a class role. If you mistakenly assigned the wrong role, contact <@575252669443211264>."
+            )
             return
 
         await user.add_roles(discord.Object(CRoles.sophomores), reason="Class Roles")
@@ -46,8 +61,15 @@ class ClassRoles(commands.Cog):
         if user is None:
             user = ctx.author
 
-        elif user != ctx.author and await has_no_roles_check(ctx, *MOD_ROLES):
+        if user != ctx.author and await has_no_roles_check(ctx, *MOD_ROLES):
             await ctx.send("You cannot assign a user other than yourself a class role.")
+            return
+
+        # Check if the user is self-roleing and already has a class role.
+        if user == ctx.author and await has_any_role_check(ctx, *CLASS_ROLES):
+            await ctx.send(
+                "You already have a class role. If you mistakenly assigned the wrong role, contact <@575252669443211264>."
+            )
             return
 
         await user.add_roles(discord.Object(CRoles.juniors), reason="Class Roles")
@@ -58,8 +80,15 @@ class ClassRoles(commands.Cog):
         if user is None:
             user = ctx.author
 
-        elif user != ctx.author and await has_no_roles_check(ctx, *MOD_ROLES):
+        if user != ctx.author and await has_no_roles_check(ctx, *MOD_ROLES):
             await ctx.send("You cannot assign a user other than yourself a class role.")
+            return
+
+        # Check if the user is self-roleing and already has a class role.
+        if user == ctx.author and await has_any_role_check(ctx, *CLASS_ROLES):
+            await ctx.send(
+                "You already have a class role. If you mistakenly assigned the wrong role, contact <@575252669443211264>."
+            )
             return
 
         await user.add_roles(discord.Object(CRoles.seniors), reason="Class Roles")
@@ -70,8 +99,15 @@ class ClassRoles(commands.Cog):
         if user is None:
             user = ctx.author
 
-        elif user != ctx.author and await has_no_roles_check(ctx, *MOD_ROLES):
+        if user != ctx.author and await has_no_roles_check(ctx, *MOD_ROLES):
             await ctx.send("You cannot assign a user other than yourself a class role.")
+            return
+
+        # Check if the user is self-roleing and already has a class role.
+        if user == ctx.author and await has_any_role_check(ctx, *CLASS_ROLES):
+            await ctx.send(
+                "You already have a class role. If you mistakenly assigned the wrong role, contact <@575252669443211264>."
+            )
             return
 
         await user.add_roles(discord.Object(CRoles.alumni), reason="Class Roles")
