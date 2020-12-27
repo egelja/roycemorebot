@@ -1,7 +1,7 @@
 # RoycemoreBot
 A bot for the Roycemore Discord server.
 
-![Bitbucket open issues](https://img.shields.io/bitbucket/issues-raw/NinoMaruszewski/roycemorebot?style=for-the-badge) ![Bitbucket open pull requests](https://img.shields.io/bitbucket/pr-raw/NinoMaruszewski/roycemorebot?style=for-the-badge) [![License](https://img.shields.io/badge/License-MIT-brightgreen?style=for-the-badge)](./LICENSE)
+[![Bitbucket open issues](https://img.shields.io/bitbucket/issues-raw/NinoMaruszewski/roycemorebot?style=for-the-badge)](https://bitbucket.org/NinoMaruszewski/roycemorebot/issues/) [![Bitbucket open pull requests](https://img.shields.io/bitbucket/pr-raw/NinoMaruszewski/roycemorebot?style=for-the-badge)](https://bitbucket.org/NinoMaruszewski/roycemorebot/pull-requests/) [![License](https://img.shields.io/badge/License-MIT-brightgreen?style=for-the-badge)](./LICENSE)
 
 ## Table of Contents
 
