@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="" rel="noopener">
+  <a href="https://github.com/NinoMaruszewski/roycemorebot" rel="noopener">
  <img width=200px height=200px src="https://i0.wp.com/roycemoreschool.org/wp-content/uploads/2019/03/cropped-Screen-Shot-2019-02-15-at-12.46.45-PM.png" alt="Project logo"></a>
 </p>
 
