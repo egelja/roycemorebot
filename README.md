@@ -84,4 +84,4 @@ You can use [PM2](https://pm2.keymetrics.io/) to deploy it. If you have a better
 
 ## Authors <a name = "authors"></a>
 
-- [@NinoMaruszewski](https://bitbucket.org/NinoMaruszewski/) - Idea & Initial work
+- [@NinoMaruszewski](https://github.com/NinoMaruszewski/) - Idea & Initial work
