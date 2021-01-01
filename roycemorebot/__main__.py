@@ -55,12 +55,14 @@ for file in os.listdir(os.path.join(".", "roycemorebot", "exts")):
         bot.load_extension(f"roycemorebot.exts.{file[:-3]}")
 
 
+@commands.has_any_role(*constants.BOT_ADMINS)
 @bot.command()
 async def reload(ctx: commands.Context, cog: str) -> None:
     """Reload a cog."""
     try:
-        bot.unload_extension(cog)
-        bot.load_extension(cog)
+        bot.reload_extension(cog) if "roycemorebot" in cog else bot.reload_extension(
+            f"roycemorebot.exts.{cog}"
+        )
     except commands.ExtensionNotLoaded:
         await ctx.send(f"Could not find the extension `{cog}`!")
     else:

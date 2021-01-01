@@ -12,6 +12,7 @@ class ClassRoles(commands.Cog, name="Class Roles"):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
+    @commands.guild_only()
     @commands.command(aliases=("fm", "freshmen"))
     async def freshman(
         self, ctx: commands.Context, user: discord.Member = None
@@ -40,6 +41,7 @@ class ClassRoles(commands.Cog, name="Class Roles"):
 
         await user.add_roles(discord.Object(CRoles.freshmen), reason="Class Roles")
 
+    @commands.guild_only()
     @commands.command(aliases=("sm", "sophomores"))
     async def sophomore(
         self, ctx: commands.Context, user: discord.Member = None
@@ -67,6 +69,7 @@ class ClassRoles(commands.Cog, name="Class Roles"):
 
         await user.add_roles(discord.Object(CRoles.sophomores), reason="Class Roles")
 
+    @commands.guild_only()
     @commands.command(aliases=("jr", "juniors"))
     async def junior(self, ctx: commands.Context, user: discord.Member = None) -> None:
         """Give a junior the `Junior` role."""
@@ -92,6 +95,7 @@ class ClassRoles(commands.Cog, name="Class Roles"):
 
         await user.add_roles(discord.Object(CRoles.juniors), reason="Class Roles")
 
+    @commands.guild_only()
     @commands.command(aliases=("sr", "seniors"))
     async def senior(self, ctx: commands.Context, user: discord.Member = None) -> None:
         """Give a senior the `Senior` role."""
@@ -117,6 +121,7 @@ class ClassRoles(commands.Cog, name="Class Roles"):
 
         await user.add_roles(discord.Object(CRoles.seniors), reason="Class Roles")
 
+    @commands.guild_only()
     @commands.command(aliases=("al", "alumni"))
     async def alum(self, ctx: commands.Context, user: discord.Member = None) -> None:
         """Give a alum the `Alumni` role."""
@@ -142,6 +147,7 @@ class ClassRoles(commands.Cog, name="Class Roles"):
 
         await user.add_roles(discord.Object(CRoles.alumni), reason="Class Roles")
 
+    @commands.guild_only()
     @commands.has_permissions(manage_roles=True)
     @commands.command(name="new-grade", aliases=("n-g", "new-school-year"))
     async def new_grade(self, ctx: commands.Context) -> None:

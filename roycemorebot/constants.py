@@ -144,6 +144,7 @@ class Emoji(metaclass=JSONGetter):
 
 
 # Groups
+BOT_ADMINS = [StaffRoles.bot_team_role, StaffRoles.admin_role]
 MOD_ROLES = [StaffRoles.mod_role, StaffRoles.admin_role]
 CLASS_ROLES = [
     ClassRoles.freshmen,
