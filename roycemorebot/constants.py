@@ -97,15 +97,28 @@ class Bot(metaclass=JSONGetter):
     bot_token: str
 
 
-class Roles(metaclass=JSONGetter):
+class StaffRoles(metaclass=JSONGetter):
     """Roles from the guild of the bot."""
 
     section = "guild"
-    subsection = "roles"
+    subsection = "staff_roles"
 
     admin_role: int
     mod_role: int
     bot_team_role: int
+
+
+class ClassRoles(metaclass=JSONGetter):
+    """Class roles from the bot's guild."""
+
+    section = "guild"
+    subsection = "class_roles"
+
+    freshmen: int
+    sophomores: int
+    juniors: int
+    seniors: int
+    alumni: int
 
 
 class Channels(metaclass=JSONGetter):
@@ -122,9 +135,21 @@ class Emoji(metaclass=JSONGetter):
     """Emojis that the bot will use."""
 
     section = "style"
-    subsection = 'emoji'
+    subsection = "emoji"
 
     ok: str
     warning: str
     no: str
     green_check: str
+
+
+# Groups
+BOT_ADMINS = [StaffRoles.bot_team_role, StaffRoles.admin_role]
+MOD_ROLES = [StaffRoles.mod_role, StaffRoles.admin_role]
+CLASS_ROLES = [
+    ClassRoles.freshmen,
+    ClassRoles.sophomores,
+    ClassRoles.juniors,
+    ClassRoles.seniors,
+    ClassRoles.alumni,
+]

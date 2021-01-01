@@ -1,6 +1,6 @@
-from datetime import datetime
 import logging
 import os
+from datetime import datetime
 
 import discord
 from discord.ext import commands
@@ -32,7 +32,9 @@ intents.members = True
 bot = CogLoggingBot(
     command_prefix=constants.Bot.prefix,
     intents=intents,
-    activity=discord.Activity(type=discord.ActivityType.watching, name="$help"),
+    activity=discord.Activity(
+        type=discord.ActivityType.watching, name=f"{constants.Bot.prefix}help"
+    ),
 )
 bot.start_time = datetime.utcnow()
 
@@ -53,12 +55,14 @@ for file in os.listdir(os.path.join(".", "roycemorebot", "exts")):
         bot.load_extension(f"roycemorebot.exts.{file[:-3]}")
 
 
-@bot.command()
+@commands.has_any_role(*constants.BOT_ADMINS)
+@bot.command(aliases=("r",))
 async def reload(ctx: commands.Context, cog: str) -> None:
     """Reload a cog."""
     try:
-        bot.unload_extension(cog)
-        bot.load_extension(cog)
+        bot.reload_extension(cog) if "roycemorebot" in cog else bot.reload_extension(
+            f"roycemorebot.exts.{cog}"
+        )
     except commands.ExtensionNotLoaded:
         await ctx.send(f"Could not find the extension `{cog}`!")
     else:

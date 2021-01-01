@@ -1,13 +1,20 @@
 {
     "bot": {
-        "prefix": "$",
+        "prefix": "?",
         "bot_token": "!ENV"
     },
     "guild": {
-        "roles": {
+        "staff_roles": {
             "admin_role": 786312173667745812,
             "mod_role": 786309162828562474,
             "bot_team_role": 789869191138246657
+        },
+        "class_roles": {
+            "freshmen": 786314158445559878,
+            "sophomores": 786314187625857044,
+            "juniors": 786314208098254888,
+            "seniors": 786314244630773761,
+            "alumni": 786718661012488242
         },
         "channels": {
             "roycemorebot_commands": 790600801583235112,

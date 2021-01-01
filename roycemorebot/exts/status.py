@@ -6,7 +6,7 @@ from discord import Colour, Embed
 from discord.ext import commands
 from discord.ext.commands.errors import CommandError, MissingAnyRole, NoPrivateMessage
 
-from roycemorebot.constants import Channels, Emoji, Roles
+from roycemorebot.constants import BOT_ADMINS, Channels, Emoji
 
 PRECISION = 3
 
@@ -19,7 +19,7 @@ class Status(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-    @commands.command(aliases=["latency"])
+    @commands.command(aliases=("latency",))
     async def ping(self, ctx: commands.Context) -> None:
         """View the latency of the bot."""
         raw_bot_latency = (
@@ -41,18 +41,20 @@ class Status(commands.Cog):
 
         await ctx.send(embed=embed)
 
-    @commands.command(aliases=["ut"])
+    @commands.command(aliases=("ut",))
     async def uptime(self, ctx: commands.Context) -> None:
         """View the uptime of the bot."""
         uptime = datetime.utcnow() - self.bot.start_time
         days = uptime.days
         hours, rem = divmod(uptime.seconds, 3600)
         minutes, seconds = divmod(rem, 60)
-        await ctx.send(f"I've been online for {days} day(s), {hours} hour(s), {minutes} minute(s), and {seconds} second(s).")
+        await ctx.send(
+            f"I've been online for {days} day{'s' if days != 1 else ''}, {hours} hour{'s' if hours != 1 else ''}, {minutes} minute{'s' if minutes != 1 else ''}, and {seconds} second{'s' if seconds != 1 else ''}."
+        )
 
-    @commands.command(aliases=["reboot"])
     @commands.guild_only()
-    @commands.has_any_role(Roles.bot_team_role, Roles.admin_role)
+    @commands.has_any_role(*BOT_ADMINS)
+    @commands.command(aliases=("reboot",))
     async def restart(self, ctx: commands.Context, delay: int = 0) -> None:
         """Restart the bot after a certain delay (in seconds)."""
         if delay != 0:
