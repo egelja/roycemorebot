@@ -6,13 +6,13 @@ from roycemorebot.constants import CLASS_ROLES, MOD_ROLES
 from roycemorebot.constants import ClassRoles as CRoles
 
 
-class ClassRoles(commands.Cog):
+class ClassRoles(commands.Cog, name="Class Roles"):
     """User-assigned roles based on their grade."""
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-    @commands.command(aliases=["fm", "freshmen"])
+    @commands.command(aliases=("fm", "freshmen"))
     async def freshman(
         self, ctx: commands.Context, user: discord.Member = None
     ) -> None:
@@ -32,14 +32,15 @@ class ClassRoles(commands.Cog):
 
         # Check if the user is self-roleing and already has a class role.
         if user == ctx.author and await has_any_role_check(ctx, *CLASS_ROLES):
+            modmail = discord.utils.get(ctx.guild.members, id=575252669443211264)
             await ctx.send(
-                "You already have a class role. If you mistakenly assigned the wrong role, contact <@575252669443211264>."
+                f"You already have a class role. If you mistakenly assigned the wrong role, contact {modmail.mention}."
             )
             return
 
         await user.add_roles(discord.Object(CRoles.freshmen), reason="Class Roles")
 
-    @commands.command(aliases=["sm", "sophomores"])
+    @commands.command(aliases=("sm", "sophomores"))
     async def sophomore(
         self, ctx: commands.Context, user: discord.Member = None
     ) -> None:
@@ -58,14 +59,15 @@ class ClassRoles(commands.Cog):
 
         # Check if the user is self-roleing and already has a class role.
         if user == ctx.author and await has_any_role_check(ctx, *CLASS_ROLES):
+            modmail = discord.utils.get(ctx.guild.members, id=575252669443211264)
             await ctx.send(
-                "You already have a class role. If you mistakenly assigned the wrong role, contact <@575252669443211264>."
+                f"You already have a class role. If you mistakenly assigned the wrong role, contact {modmail.mention}."
             )
             return
 
         await user.add_roles(discord.Object(CRoles.sophomores), reason="Class Roles")
 
-    @commands.command(aliases=["jr", "juniors"])
+    @commands.command(aliases=("jr", "juniors"))
     async def junior(self, ctx: commands.Context, user: discord.Member = None) -> None:
         """Give a junior the `Junior` role."""
         if user is None:
@@ -82,14 +84,15 @@ class ClassRoles(commands.Cog):
 
         # Check if the user is self-roleing and already has a class role.
         if user == ctx.author and await has_any_role_check(ctx, *CLASS_ROLES):
+            modmail = discord.utils.get(ctx.guild.members, id=575252669443211264)
             await ctx.send(
-                "You already have a class role. If you mistakenly assigned the wrong role, contact <@575252669443211264>."
+                f"You already have a class role. If you mistakenly assigned the wrong role, contact {modmail.mention}."
             )
             return
 
         await user.add_roles(discord.Object(CRoles.juniors), reason="Class Roles")
 
-    @commands.command(aliases=["sr", "seniors"])
+    @commands.command(aliases=("sr", "seniors"))
     async def senior(self, ctx: commands.Context, user: discord.Member = None) -> None:
         """Give a senior the `Senior` role."""
         if user is None:
@@ -106,14 +109,15 @@ class ClassRoles(commands.Cog):
 
         # Check if the user is self-roleing and already has a class role.
         if user == ctx.author and await has_any_role_check(ctx, *CLASS_ROLES):
+            modmail = discord.utils.get(ctx.guild.members, id=575252669443211264)
             await ctx.send(
-                "You already have a class role. If you mistakenly assigned the wrong role, contact <@575252669443211264>."
+                f"You already have a class role. If you mistakenly assigned the wrong role, contact {modmail.mention}."
             )
             return
 
         await user.add_roles(discord.Object(CRoles.seniors), reason="Class Roles")
 
-    @commands.command(aliases=["al", "alumni"])
+    @commands.command(aliases=("al", "alumni"))
     async def alum(self, ctx: commands.Context, user: discord.Member = None) -> None:
         """Give a alum the `Alumni` role."""
         if user is None:
@@ -130,12 +134,19 @@ class ClassRoles(commands.Cog):
 
         # Check if the user is self-roleing and already has a class role.
         if user == ctx.author and await has_any_role_check(ctx, *CLASS_ROLES):
+            modmail = discord.utils.get(ctx.guild.members, id=575252669443211264)
             await ctx.send(
-                "You already have a class role. If you mistakenly assigned the wrong role, contact <@575252669443211264>."
+                f"You already have a class role. If you mistakenly assigned the wrong role, contact {modmail.mention}."
             )
             return
 
         await user.add_roles(discord.Object(CRoles.alumni), reason="Class Roles")
+
+    @commands.has_permissions(manage_roles=True)
+    @commands.command(name="new-grade", aliases=("n-g", "new-school-year"))
+    async def new_grade(self, ctx: commands.Context) -> None:
+        """Move everyone's grade level role up one."""
+        pass
 
 
 def setup(bot: commands.Bot) -> None:
