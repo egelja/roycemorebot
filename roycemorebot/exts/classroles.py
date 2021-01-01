@@ -183,6 +183,7 @@ class ClassRoles(commands.Cog, name="Class Roles"):
     )
     async def new_grade(self, ctx: commands.Context) -> None:
         """Move everyone's grade level role up one."""
+        log.info(f"Started role update at the request of {ctx.author}")
         # Make role IDs into objects for easier comparison:
         freshmen = ctx.guild.get_role(CRoles.freshmen)
         sophomores = ctx.guild.get_role(CRoles.sophomores)
