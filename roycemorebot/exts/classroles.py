@@ -1,9 +1,13 @@
+import logging
+
 import discord
 from discord.ext import commands
 
 from roycemorebot.checks import has_any_role_check, has_no_roles_check
 from roycemorebot.constants import CLASS_ROLES, MOD_ROLES
 from roycemorebot.constants import ClassRoles as CRoles
+
+log = logging.getLogger(__name__)
 
 
 class ClassRoles(commands.Cog, name="Class Roles"):
@@ -26,9 +30,13 @@ class ClassRoles(commands.Cog, name="Class Roles"):
             await ctx.send("You cannot assign a user other than yourself a class role.")
             return
         elif user != ctx.author and await has_any_role_check(ctx, *MOD_ROLES):
+            log.info(
+                f"Replacing {user}'s class roles at request of moderator {ctx.author}"
+            )
             for role in CLASS_ROLES:
                 await user.remove_roles(
-                    discord.Object(role), reason="Mod Replacing Class Roles"
+                    discord.Object(role),
+                    reason=f"Moderator {ctx.author} Replacing {user}'s Class Roles",
                 )
 
         # Check if the user is self-roleing and already has a class role.
@@ -40,6 +48,7 @@ class ClassRoles(commands.Cog, name="Class Roles"):
             return
 
         await user.add_roles(discord.Object(CRoles.freshmen), reason="Class Roles")
+        log.trace(f"Assigned {user} the Freshmen role")
 
     @commands.guild_only()
     @commands.command(aliases=("sm", "sophomores"))
@@ -54,9 +63,13 @@ class ClassRoles(commands.Cog, name="Class Roles"):
             await ctx.send("You cannot assign a user other than yourself a class role.")
             return
         elif user != ctx.author and await has_any_role_check(ctx, *MOD_ROLES):
+            log.info(
+                f"Replacing {user}'s class roles at request of moderator {ctx.author}"
+            )
             for role in CLASS_ROLES:
                 await user.remove_roles(
-                    discord.Object(role), reason="Mod Replacing Class Roles"
+                    discord.Object(role),
+                    reason=f"Moderator {ctx.author} Replacing {user}'s Class Roles",
                 )
 
         # Check if the user is self-roleing and already has a class role.
@@ -68,6 +81,7 @@ class ClassRoles(commands.Cog, name="Class Roles"):
             return
 
         await user.add_roles(discord.Object(CRoles.sophomores), reason="Class Roles")
+        log.trace(f"Assigned {user} the Sophomore role")
 
     @commands.guild_only()
     @commands.command(aliases=("jr", "juniors"))
@@ -80,9 +94,13 @@ class ClassRoles(commands.Cog, name="Class Roles"):
             await ctx.send("You cannot assign a user other than yourself a class role.")
             return
         elif user != ctx.author and await has_any_role_check(ctx, *MOD_ROLES):
+            log.info(
+                f"Replacing {user}'s class roles at request of moderator {ctx.author}"
+            )
             for role in CLASS_ROLES:
                 await user.remove_roles(
-                    discord.Object(role), reason="Mod Replacing Class Roles"
+                    discord.Object(role),
+                    reason=f"Moderator {ctx.author} Replacing {user}'s Class Roles",
                 )
 
         # Check if the user is self-roleing and already has a class role.
@@ -94,6 +112,7 @@ class ClassRoles(commands.Cog, name="Class Roles"):
             return
 
         await user.add_roles(discord.Object(CRoles.juniors), reason="Class Roles")
+        log.trace(f"Assigned {user} the Junior role")
 
     @commands.guild_only()
     @commands.command(aliases=("sr", "seniors"))
@@ -106,9 +125,13 @@ class ClassRoles(commands.Cog, name="Class Roles"):
             await ctx.send("You cannot assign a user other than yourself a class role.")
             return
         elif user != ctx.author and await has_any_role_check(ctx, *MOD_ROLES):
+            log.info(
+                f"Replacing {user}'s class roles at request of moderator {ctx.author}"
+            )
             for role in CLASS_ROLES:
                 await user.remove_roles(
-                    discord.Object(role), reason="Mod Replacing Class Roles"
+                    discord.Object(role),
+                    reason=f"Moderator {ctx.author} Replacing {user}'s Class Roles",
                 )
 
         # Check if the user is self-roleing and already has a class role.
@@ -120,6 +143,7 @@ class ClassRoles(commands.Cog, name="Class Roles"):
             return
 
         await user.add_roles(discord.Object(CRoles.seniors), reason="Class Roles")
+        log.trace(f"Assigned {user} the Senior role")
 
     @commands.guild_only()
     @commands.command(aliases=("al", "alumni"))
@@ -132,9 +156,13 @@ class ClassRoles(commands.Cog, name="Class Roles"):
             await ctx.send("You cannot assign a user other than yourself a class role.")
             return
         elif user != ctx.author and await has_any_role_check(ctx, *MOD_ROLES):
+            log.info(
+                f"Replacing {user}'s class roles at request of moderator {ctx.author}"
+            )
             for role in CLASS_ROLES:
                 await user.remove_roles(
-                    discord.Object(role), reason="Mod Replacing Class Roles"
+                    discord.Object(role),
+                    reason=f"Moderator {ctx.author} Replacing {user}'s Class Roles",
                 )
 
         # Check if the user is self-roleing and already has a class role.
@@ -146,13 +174,57 @@ class ClassRoles(commands.Cog, name="Class Roles"):
             return
 
         await user.add_roles(discord.Object(CRoles.alumni), reason="Class Roles")
+        log.trace(f"Assigned {user} the Alumni role")
 
     @commands.guild_only()
     @commands.has_permissions(manage_roles=True)
-    @commands.command(name="new-grade", aliases=("n-g", "new-school-year"))
+    @commands.command(
+        name="new-grade", aliases=("n-g", "ng", "new-school-year", "n-s-y", "nsy")
+    )
     async def new_grade(self, ctx: commands.Context) -> None:
         """Move everyone's grade level role up one."""
-        pass
+        # Make role IDs into objects for easier comparison:
+        freshmen = ctx.guild.get_role(CRoles.freshmen)
+        sophomores = ctx.guild.get_role(CRoles.sophomores)
+        juniors = ctx.guild.get_role(CRoles.juniors)
+        seniors = ctx.guild.get_role(CRoles.seniors)
+        alumni = ctx.guild.get_role(CRoles.alumni)
+        log.trace(f"Freshmen role: {freshmen}")
+
+        for member in ctx.guild.members:
+            if freshmen in member.roles:
+                await member.remove_roles(freshmen, reason="Class Roles update.")
+                await member.add_roles(sophomores, reason="Class Roles update.")
+                await member.send(
+                    f"Your grade level role has been changed to {sophomores.name}. Have a great school year!"
+                )
+                log.info(f"{member} has been moved from {freshmen} to {sophomores}")
+            elif sophomores in member.roles:
+                await member.remove_roles(sophomores, reason="Class Roles update.")
+                await member.add_roles(juniors, reason="Class Roles update.")
+                await member.send(
+                    f"Your grade level role has been changed to {juniors.name}. Have a great school year!"
+                )
+                log.info(f"{member} has been moved from {sophomores} to {juniors}")
+            elif juniors in member.roles:
+                await member.remove_roles(juniors, reason="Class Roles update.")
+                await member.add_roles(seniors, reason="Class Roles update.")
+                await member.send(
+                    f"Your grade level role has been changed to {seniors.name}. Have a great school year!"
+                )
+                log.info(f"{member} has been moved from {juniors} to {seniors}")
+            elif seniors in member.roles:
+                await member.remove_roles(seniors, reason="Class Roles update.")
+                await member.add_roles(alumni, reason="Class Roles update.")
+                await member.send(
+                    f"Your grade level role has been changed to {alumni.name}. Have fun in college!"
+                )
+                log.info(f"{member} has been moved from {seniors} to {alumni}")
+            else:
+                log.info(
+                    f"{member} was either a bot or an alum, their class roles were not changed. Their roles are: {member.roles}"
+                )
+        await ctx.send("Updated all class roles!")
 
 
 def setup(bot: commands.Bot) -> None:

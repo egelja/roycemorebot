@@ -56,7 +56,7 @@ for file in os.listdir(os.path.join(".", "roycemorebot", "exts")):
 
 
 @commands.has_any_role(*constants.BOT_ADMINS)
-@bot.command()
+@bot.command(aliases=("r",))
 async def reload(ctx: commands.Context, cog: str) -> None:
     """Reload a cog."""
     try:
