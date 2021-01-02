@@ -5,6 +5,7 @@ from pathlib import Path
 
 import discord
 from discord.ext import commands
+from fuzzywuzzy import process
 
 from roycemorebot.constants import Categories, Channels, Guild, StaffRoles
 
@@ -92,7 +93,7 @@ class Subscriptions(commands.Cog):
         for channel in clubs_category.channels:
             announcement_role = discord.utils.find(
                 lambda role: "Announcements" in role.name
-                and channel.name in role.name.lower(),
+                and role.name.lower().startswith(channel.name),
                 guild.roles,
             )
             announcement_roles[channel.name] = announcement_role.id
@@ -106,6 +107,33 @@ class Subscriptions(commands.Cog):
 
         log.info("Announcement role reload finished")
         return announcement_roles
+
+    @commands.command(aliases=("sub",))
+    async def subscribe(self, ctx: commands.Context, announcement_name: str) -> None:
+        """Subscribe to an announcement role on the server."""
+        all_roles = list(self._announcement_roles.keys())
+        log.trace(f"All roles: {all_roles}")
+        match_info = process.extractOne(
+            announcement_name,
+            all_roles,
+            score_cutoff=75,
+        )
+        log.trace(f"Match info: {match_info}")
+        if match_info:
+            role_name = match_info[0]
+            log.trace(f"Matched role `{role_name}` with probability {match_info[1]}")
+            await ctx.author.add_roles(
+                discord.Object(self._announcement_roles[role_name]),
+                reason="User announcements subscription",
+            )
+            log.info(f"User {ctx.author} subscribed to {role_name}")
+            await ctx.send(
+                f"{ctx.author.mention}, you have successfully subscribed to {role_name} Announcements."
+            )
+        else:
+            await ctx.send(
+                f"{ctx.author.mention}, there are no announcement roles with that name."
+            )
 
 
 def setup(bot: commands.Bot) -> None:
