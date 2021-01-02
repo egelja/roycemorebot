@@ -7,7 +7,14 @@ import discord
 from discord.ext import commands
 from fuzzywuzzy import process
 
-from roycemorebot.constants import Categories, Channels, Guild, StaffRoles
+from roycemorebot.constants import (
+    MOD_ROLES,
+    Categories,
+    Channels,
+    Emoji,
+    Guild,
+    StaffRoles,
+)
 
 log = logging.getLogger(__name__)
 
@@ -53,11 +60,13 @@ class Subscriptions(commands.Cog):
             if str(reaction.emoji) == "✅":
                 log.info(f"Announcement role reload started by {user}")
                 self._announcement_roles = self.reload_announcement_roles()
-                await mod_bot_channel.send("Announcement roles reloaded!")
+                await mod_bot_channel.send(
+                    f"{Emoji.ok} Successfully reloaded announcement roles!"
+                )
             else:
                 log.info(f"Announcement role reload canceled by {user}")
                 await mod_bot_channel.send(
-                    "Announcement role reload canceled. Use `?subscriptions reload` to reload the announcement roles."
+                    f"{Emoji.no} Announcement role reload canceled. Use `?subscriptions reload` to reload the announcement roles."
                 )
 
     @staticmethod
@@ -134,6 +143,20 @@ class Subscriptions(commands.Cog):
             await ctx.send(
                 f"{ctx.author.mention}, there are no announcement roles with that name."
             )
+
+    @commands.group(
+        name="subscriptions", aliases=("subs",), invoke_without_command=True
+    )
+    async def subscriptions_group(self, ctx: commands.Context) -> None:
+        """Commands group for managing announcement subscriptions."""
+        await ctx.send_help(ctx.command)
+
+    @commands.has_any_role(*MOD_ROLES)
+    @subscriptions_group.command(aliases=("r",))
+    async def reload(self, ctx: commands.Context) -> None:
+        """Reload the announcement roles save."""
+        self._announcement_roles = self.reload_announcement_roles()
+        await ctx.send(f"{Emoji.ok} Successfully reloaded announcement roles!")
 
 
 def setup(bot: commands.Bot) -> None:
