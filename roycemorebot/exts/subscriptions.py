@@ -151,6 +151,25 @@ class Subscriptions(commands.Cog):
         """Commands group for managing announcement subscriptions."""
         await ctx.send_help(ctx.command)
 
+    @subscriptions_group.command(name="list", aliases=("l", "ls"))
+    async def list_subscriptions(self, ctx: commands.Context) -> None:
+        """List all possible announcement subscriptions and their corresponding commands."""
+        embed = discord.Embed(
+            title="Announcement Subscriptions",
+            description="Here are all the possible announcement subscriptions and their commands.",
+            color=discord.Colour.green(),
+        )
+
+        all_subs = list(self._announcement_roles.keys())
+        for subscription in all_subs:
+            embed.add_field(
+                name=f"{subscription.title()} Announcements",
+                value=f"`?subscribe {subscription}`",
+                inline=True,
+            )
+
+        await ctx.send(embed=embed)
+
     @commands.has_any_role(*MOD_ROLES)
     @subscriptions_group.command(aliases=("r",))
     async def reload(self, ctx: commands.Context) -> None:
