@@ -4,6 +4,7 @@
         "bot_token": "!ENV"
     },
     "guild": {
+        "guild_id": 786307729966628903,
         "staff_roles": {
             "admin_role": 786312173667745812,
             "mod_role": 786309162828562474,
@@ -18,7 +19,11 @@
         },
         "channels": {
             "roycemorebot_commands": 790600801583235112,
-            "bot_log": 790600881003429908
+            "bot_log": 790600881003429908,
+            "mod_bot_commands": 786387432064024586
+        },
+        "categories": {
+            "clubs": 786315836637970492
         }
     },
     "style": {

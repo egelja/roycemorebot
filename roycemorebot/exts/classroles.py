@@ -199,30 +199,30 @@ class ClassRoles(commands.Cog, name="Class Roles"):
                 await member.send(
                     f"Your grade level role has been changed to {sophomores.name}. Have a great school year!"
                 )
-                log.info(f"{member} has been moved from {freshmen} to {sophomores}")
+                log.trace(f"{member} has been moved from {freshmen} to {sophomores}")
             elif sophomores in member.roles:
                 await member.remove_roles(sophomores, reason="Class Roles update.")
                 await member.add_roles(juniors, reason="Class Roles update.")
                 await member.send(
                     f"Your grade level role has been changed to {juniors.name}. Have a great school year!"
                 )
-                log.info(f"{member} has been moved from {sophomores} to {juniors}")
+                log.trace(f"{member} has been moved from {sophomores} to {juniors}")
             elif juniors in member.roles:
                 await member.remove_roles(juniors, reason="Class Roles update.")
                 await member.add_roles(seniors, reason="Class Roles update.")
                 await member.send(
                     f"Your grade level role has been changed to {seniors.name}. Have a great school year!"
                 )
-                log.info(f"{member} has been moved from {juniors} to {seniors}")
+                log.trace(f"{member} has been moved from {juniors} to {seniors}")
             elif seniors in member.roles:
                 await member.remove_roles(seniors, reason="Class Roles update.")
                 await member.add_roles(alumni, reason="Class Roles update.")
                 await member.send(
                     f"Your grade level role has been changed to {alumni.name}. Have fun in college!"
                 )
-                log.info(f"{member} has been moved from {seniors} to {alumni}")
+                log.trace(f"{member} has been moved from {seniors} to {alumni}")
             else:
-                log.info(
+                log.trace(
                     f"{member} was either a bot or an alum, their class roles were not changed. Their roles are: {member.roles}"
                 )
         await ctx.send("Updated all class roles!")
