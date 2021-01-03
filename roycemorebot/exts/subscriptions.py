@@ -177,6 +177,9 @@ class Subscriptions(commands.Cog):
         self._announcement_roles = self.reload_announcement_roles()
         await ctx.send(f"{Emoji.ok} Successfully reloaded announcement roles!")
 
+    # @commands.has_role(StaffRoles.admin_role)
+    # @subscriptions_group.command(name="add", aliases=('a',))
+
 
 def setup(bot: commands.Bot) -> None:
     """Add the Subscriptions cog to the bot."""
