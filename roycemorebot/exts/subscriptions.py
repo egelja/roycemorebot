@@ -70,6 +70,12 @@ class Subscriptions(commands.Cog):
                     f"{Emoji.no} Announcement role reload canceled. Use `?subscriptions reload` to reload the announcement roles."
                 )
 
+    @commands.Cog.listener()
+    async def on_member_join(self, member: discord.Member) -> None:
+        """Give every new member to the server the `DJ` role."""
+        if not member.bot:
+            member.add_roles(discord.Object(StaffRoles.dj_role), reason="Auto DJ-role")
+
     @staticmethod
     def load_announcement_roles() -> "dict[str, dict[str, typing.Union[int, bool]]]":
         """Load all the announcement roles from the save file."""
@@ -214,11 +220,11 @@ class Subscriptions(commands.Cog):
         # Create the roles and assign them
         leader_role = await guild.create_role(
             name=f"{name.title()} {'Club' if club else ''} {leader_title}",
-            reason="Club creation"
+            reason="Club creation",
         )
         ann_role = await guild.create_role(
             name=f"{name.title()} {'Club' if club else ''} Announcements",
-            reason="Club creation"
+            reason="Club creation",
         )
         log.trace(f"Created {leader_role} and {ann_role} role")
 
@@ -246,7 +252,7 @@ class Subscriptions(commands.Cog):
                     manage_messages=True,
                 ),
             },
-            reason="Club creation"
+            reason="Club creation",
         )
         position = sorted(
             clubs_category.text_channels, key=lambda channel: channel.name
