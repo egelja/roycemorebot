@@ -1,7 +1,7 @@
 # TODO List
 1. ~~Uptime~~ DONE!
 2. ~~Restart~~ DONE!
-3. Autorole
+3. ~~Autorole~~ DONE!
 4. Mod commands
 5. Infraction commands/storage
 6. User info command
