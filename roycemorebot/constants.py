@@ -114,6 +114,7 @@ class StaffRoles(metaclass=JSONGetter):
     admin_role: int
     mod_role: int
     bot_team_role: int
+    muted_role: int
 
 
 class ClassRoles(metaclass=JSONGetter):

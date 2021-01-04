@@ -1,6 +1,7 @@
 import asyncio
 import json
 import logging
+import typing
 from pathlib import Path
 
 import discord
@@ -70,7 +71,7 @@ class Subscriptions(commands.Cog):
                 )
 
     @staticmethod
-    def load_announcement_roles() -> "dict[str, int]":
+    def load_announcement_roles() -> "dict[str, dict[str, typing.Union[int, bool]]]":
         """Load all the announcement roles from the save file."""
         save_file = Path("data", "announcement_roles.json")
 
@@ -83,7 +84,9 @@ class Subscriptions(commands.Cog):
         else:
             return {}  # Checked later in `on_ready` and loaded from guild.
 
-    def reload_announcement_roles(self) -> "dict[str, int]":
+    def reload_announcement_roles(
+        self,
+    ) -> "dict[str, dict[str, typing.Union[int, bool]]]":
         """Reload the list of all the announcement roles in the current guild."""
         announcement_roles = {}
 
@@ -92,12 +95,14 @@ class Subscriptions(commands.Cog):
 
         log.trace("Starting role reload.")
         # Get server and event announcements seperately
-        announcement_roles["server"] = discord.utils.get(
-            guild.roles, name="Server Announcements"
-        )
-        announcement_roles["event"] = discord.utils.get(
-            guild.roles, name="Event Announcements"
-        )
+        announcement_roles["server"] = {
+            "id": discord.utils.get(guild.roles, name="Server Announcements").id,
+            "club": False,
+        }
+        announcement_roles["event"] = {
+            "id": discord.utils.get(guild.roles, name="Event Announcements").id,
+            "club": False,
+        }
 
         for channel in clubs_category.channels:
             announcement_role = discord.utils.find(
@@ -105,7 +110,10 @@ class Subscriptions(commands.Cog):
                 and role.name.lower().startswith(channel.name),
                 guild.roles,
             )
-            announcement_roles[channel.name] = announcement_role.id
+            announcement_roles[channel.name] = {
+                "id": announcement_role.id,
+                "club": "club" in announcement_role.name.lower(),
+            }
             log.trace(f"Channel: {channel.name}, role: {announcement_role}")
 
         log.trace("Saving announcement roles.")
@@ -129,15 +137,17 @@ class Subscriptions(commands.Cog):
         )
         log.trace(f"Match info: {match_info}")
         if match_info:
-            role_name = match_info[0]
-            log.trace(f"Matched role `{role_name}` with probability {match_info[1]}")
+            role = discord.utils.get(
+                ctx.guild.roles, id=self._announcement_roles[match_info[0]]["id"]
+            )
+            log.trace(f"Matched role `{role}` with probability {match_info[1]}")
             await ctx.author.add_roles(
-                discord.Object(self._announcement_roles[role_name]),
+                role,
                 reason="User announcements subscription",
             )
-            log.info(f"User {ctx.author} subscribed to {role_name}")
+            log.info(f"User {ctx.author} subscribed to {role}")
             await ctx.send(
-                f"{ctx.author.mention}, you have successfully subscribed to {role_name} Announcements."
+                f"{ctx.author.mention}, you have successfully subscribed to {role}."
             )
         else:
             await ctx.send(
@@ -163,7 +173,7 @@ class Subscriptions(commands.Cog):
         all_subs = list(self._announcement_roles.keys())
         for subscription in all_subs:
             embed.add_field(
-                name=f"{subscription.title()} Announcements",
+                name=f"{subscription.title()} {'Club' if self._announcement_roles[subscription]['club'] else ''} Announcements",
                 value=f"`?subscribe {subscription}`",
                 inline=True,
             )
@@ -177,8 +187,76 @@ class Subscriptions(commands.Cog):
         self._announcement_roles = self.reload_announcement_roles()
         await ctx.send(f"{Emoji.ok} Successfully reloaded announcement roles!")
 
-    # @commands.has_role(StaffRoles.admin_role)
-    # @subscriptions_group.command(name="add", aliases=('a',))
+    @commands.has_role(StaffRoles.admin_role)
+    @subscriptions_group.command(name="add-club", aliases=("add", "ac", "a-c", "a"))
+    async def add_club(
+        self,
+        ctx: commands.Context,
+        channel_name: str,
+        leaders: commands.Greedy[discord.Member] = None,
+        club: bool = True,
+        *,
+        leader_title: typing.Optional[str] = "Leader",
+    ) -> None:
+        """Create a new club channel with corresponding roles and leaders (if given)."""
+        guild = ctx.guild
+        name = channel_name.replace(" ", "-").lower()  # Discord-safe channel names
+        log.info(f"Creating a new club channel at the request of {ctx.author}")
+        leader_names = (
+            list(map(lambda l: l.name + "#" + l.discriminator, leaders))
+            if leaders
+            else None
+        )
+        log.info(
+            f"Name: {name}, leaders: {leader_names}, club: {club}, leader title: {leader_title}"
+        )
+
+        # Create the roles and assign them
+        leader_role = await guild.create_role(
+            name=f"{name.title()} {'Club' if club else ''} {leader_title}"
+        )
+        ann_role = await guild.create_role(
+            name=f"{name.title()} {'Club' if club else ''} Announcements"
+        )
+        log.trace(f"Created {leader_role} and {ann_role} role")
+
+        if leaders:
+            for leader in leaders:
+                await leader.add_roles(leader_role)
+        log.trace("Assigned leaders their roles")
+
+        # Create the channel
+        clubs_category = discord.utils.get(guild.categories, id=Categories.clubs)
+        channel = await clubs_category.create_text_channel(
+            name,
+            overwrites={
+                discord.utils.get(
+                    guild.roles, id=StaffRoles.mod_role
+                ): discord.PermissionOverwrite(view_channel=True, send_messages=True),
+                discord.utils.get(
+                    guild.roles, id=StaffRoles.muted_role
+                ): discord.PermissionOverwrite(send_messages=False),
+                leader_role: discord.PermissionOverwrite(
+                    view_channel=True,
+                    manage_channels=True,
+                    manage_permissions=True,
+                    send_messages=True,
+                    manage_messages=True,
+                ),
+            },
+        )
+        position = sorted(
+            clubs_category.text_channels, key=lambda channel: channel.name
+        ).index(channel)
+        log.trace(f"Channel index: {position}")
+        await channel.edit(position=position)
+        log.trace(f"Created channel {channel} and moved to postition {position}")
+
+        # Load new announcement roles
+        log.info(
+            f"Reloading announcement roles because of new announcement channel {channel_name}"
+        )
+        self._announcement_roles = self.reload_announcement_roles()
 
 
 def setup(bot: commands.Bot) -> None:
