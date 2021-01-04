@@ -110,11 +110,11 @@ class Subscriptions(commands.Cog):
                 and role.name.lower().startswith(channel.name),
                 guild.roles,
             )
+            log.trace(f"Channel: {channel.name}, role: {announcement_role}")
             announcement_roles[channel.name] = {
                 "id": announcement_role.id,
                 "club": "club" in announcement_role.name.lower(),
             }
-            log.trace(f"Channel: {channel.name}, role: {announcement_role}")
 
         log.trace("Saving announcement roles.")
         save_file = Path("data", "announcement_roles.json")
@@ -256,6 +256,33 @@ class Subscriptions(commands.Cog):
         log.info(
             f"Reloading announcement roles because of new announcement channel {channel_name}"
         )
+        self._announcement_roles = self.reload_announcement_roles()
+
+    @commands.has_role(StaffRoles.admin_role)
+    @subscriptions_group.command(
+        name="remove-club", aliases=("remove", "rm-c", "rmc", "rm")
+    )
+    async def remove_club(
+        self, ctx: commands.Context, club_channel: discord.TextChannel
+    ) -> None:
+        """Delete a club channel and roles."""
+        log.info(
+            f"Deleteing club channel {club_channel} and roles at the request of {ctx.author}"
+        )
+        ann_role = discord.utils.get(
+            ctx.guild.roles, id=self._announcement_roles[club_channel.name]["id"]
+        )
+        await ann_role.delete(reason="Removing club from server")
+        log.trace("Deleted announcement role")
+        leader_role = discord.utils.find(
+            lambda role: role.name.lower().startswith(club_channel.name),
+            ctx.guild.roles,
+        )
+        await leader_role.delete(reason="Removing club from server")
+        log.trace("Deleted leader role")
+        await club_channel.delete(reason="Removing club from server")
+        log.trace("Deleted channel")
+
         self._announcement_roles = self.reload_announcement_roles()
 
 
