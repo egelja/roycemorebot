@@ -140,6 +140,7 @@ class Channels(metaclass=JSONGetter):
     roycemorebot_commands: int
     bot_log: int
     mod_bot_commands: int
+    roles: int
 
 
 class Categories(metaclass=JSONGetter):

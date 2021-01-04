@@ -154,13 +154,30 @@ class Subscriptions(commands.Cog):
                 reason="User announcements subscription",
             )
             log.info(f"User {ctx.author} subscribed to {role}")
-            await ctx.send(
-                f"{ctx.author.mention}, you have successfully subscribed to {role}."
-            )
+
+            if ctx.message.channel.id == Channels.roles:
+                await ctx.send(
+                    f"{ctx.author.mention}, you have successfully subscribed to {role}.",
+                    delete_after=5.0,
+                )
+                await asyncio.sleep(5.0)
+                await ctx.message.delete()
+            else:
+                await ctx.send(
+                    f"{ctx.author.mention}, you have successfully subscribed to {role}.",
+                )
         else:
-            await ctx.send(
-                f"{ctx.author.mention}, there are no announcement roles with that name."
-            )
+            if ctx.message.channel.id == Channels.roles:
+                await ctx.send(
+                    f"{ctx.author.mention}, there are no announcement roles with that name.",
+                    delete_after=5.0,
+                )
+                await asyncio.sleep(5.0)
+                await ctx.message.delete()
+            else:
+                await ctx.send(
+                    f"{ctx.author.mention}, there are no announcement roles with that name."
+                )
 
     @commands.guild_only()
     @commands.command(aliases=("unsub",))
@@ -184,13 +201,30 @@ class Subscriptions(commands.Cog):
                 reason="User announcements unsubscription",
             )
             log.info(f"User {ctx.author} unsubscribed from {role}")
-            await ctx.send(
-                f"{ctx.author.mention}, you have successfully unsubscribed from {role}."
-            )
+
+            if ctx.message.channel.id == Channels.roles:
+                await ctx.send(
+                    f"{ctx.author.mention}, you have successfully unsubscribed from {role}.",
+                    delete_after=5.0,
+                )
+                await asyncio.sleep(5.0)
+                await ctx.message.delete()
+            else:
+                await ctx.send(
+                    f"{ctx.author.mention}, you have successfully unsubscribed from {role}.",
+                )
         else:
-            await ctx.send(
-                f"{ctx.author.mention}, there are no announcement roles with that name."
-            )
+            if ctx.message.channel.id == Channels.roles:
+                await ctx.send(
+                    f"{ctx.author.mention}, there are no announcement roles with that name.",
+                    delete_after=5.0,
+                )
+                await asyncio.sleep(5.0)
+                await ctx.message.delete()
+            else:
+                await ctx.send(
+                    f"{ctx.author.mention}, there are no announcement roles with that name."
+                )
 
     @commands.guild_only()
     @commands.group(
@@ -218,7 +252,15 @@ class Subscriptions(commands.Cog):
                 inline=True,
             )
 
-        await ctx.send(embed=embed)
+        if ctx.channel.id == Channels.roles:
+            await ctx.send(
+                f"{ctx.author.mention}, please use a bot channel to run that command.",
+                delete_after=5.0
+            )
+            await asyncio.sleep(5.0)
+            await ctx.message.delete()
+        else:
+            await ctx.send(embed=embed)
 
     @commands.guild_only()
     @commands.has_any_role(*MOD_ROLES)
