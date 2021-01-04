@@ -213,16 +213,18 @@ class Subscriptions(commands.Cog):
 
         # Create the roles and assign them
         leader_role = await guild.create_role(
-            name=f"{name.title()} {'Club' if club else ''} {leader_title}"
+            name=f"{name.title()} {'Club' if club else ''} {leader_title}",
+            reason="Club creation"
         )
         ann_role = await guild.create_role(
-            name=f"{name.title()} {'Club' if club else ''} Announcements"
+            name=f"{name.title()} {'Club' if club else ''} Announcements",
+            reason="Club creation"
         )
         log.trace(f"Created {leader_role} and {ann_role} role")
 
         if leaders:
             for leader in leaders:
-                await leader.add_roles(leader_role)
+                await leader.add_roles(leader_role, reason="Club creation")
         log.trace("Assigned leaders their roles")
 
         # Create the channel
@@ -244,12 +246,13 @@ class Subscriptions(commands.Cog):
                     manage_messages=True,
                 ),
             },
+            reason="Club creation"
         )
         position = sorted(
             clubs_category.text_channels, key=lambda channel: channel.name
         ).index(channel)
         log.trace(f"Channel index: {position}")
-        await channel.edit(position=position)
+        await channel.edit(position=position, reason="Club creation")
         log.trace(f"Created channel {channel} and moved to postition {position}")
 
         # Load new announcement roles
@@ -257,6 +260,9 @@ class Subscriptions(commands.Cog):
             f"Reloading announcement roles because of new announcement channel {channel_name}"
         )
         self._announcement_roles = self.reload_announcement_roles()
+
+        # Completion message
+        await ctx.send(f"{Emoji.ok} Successfully added club channel!")
 
     @commands.has_role(StaffRoles.admin_role)
     @subscriptions_group.command(
@@ -284,6 +290,9 @@ class Subscriptions(commands.Cog):
         log.trace("Deleted channel")
 
         self._announcement_roles = self.reload_announcement_roles()
+
+        # Completion message
+        await ctx.send(f"{Emoji.ok} Successfully removed club channel!")
 
 
 def setup(bot: commands.Bot) -> None:
