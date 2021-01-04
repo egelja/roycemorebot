@@ -132,6 +132,7 @@ class Subscriptions(commands.Cog):
         log.info("Announcement role reload finished")
         return announcement_roles
 
+    @commands.guild_only()
     @commands.command(aliases=("sub",))
     async def subscribe(self, ctx: commands.Context, announcement_name: str) -> None:
         """Subscribe to an announcement role on the server."""
@@ -161,6 +162,7 @@ class Subscriptions(commands.Cog):
                 f"{ctx.author.mention}, there are no announcement roles with that name."
             )
 
+    @commands.guild_only()
     @commands.command(aliases=("unsub",))
     async def unsubscribe(self, ctx: commands.Context, announcement_name: str) -> None:
         """Unsubscribe to an announcement role on the server."""
@@ -190,6 +192,7 @@ class Subscriptions(commands.Cog):
                 f"{ctx.author.mention}, there are no announcement roles with that name."
             )
 
+    @commands.guild_only()
     @commands.group(
         name="subscriptions", aliases=("subs",), invoke_without_command=True
     )
@@ -197,6 +200,7 @@ class Subscriptions(commands.Cog):
         """Commands group for managing announcement subscriptions."""
         await ctx.send_help(ctx.command)
 
+    @commands.guild_only()
     @subscriptions_group.command(name="list", aliases=("l", "ls"))
     async def list_subscriptions(self, ctx: commands.Context) -> None:
         """List all possible announcement subscriptions and their corresponding commands."""
@@ -216,6 +220,7 @@ class Subscriptions(commands.Cog):
 
         await ctx.send(embed=embed)
 
+    @commands.guild_only()
     @commands.has_any_role(*MOD_ROLES)
     @subscriptions_group.command(aliases=("r",))
     async def reload(self, ctx: commands.Context) -> None:
@@ -223,6 +228,7 @@ class Subscriptions(commands.Cog):
         self._announcement_roles = self.reload_announcement_roles()
         await ctx.send(f"{Emoji.ok} Successfully reloaded announcement roles!")
 
+    @commands.guild_only()
     @commands.has_role(StaffRoles.admin_role)
     @subscriptions_group.command(name="add-club", aliases=("add", "ac", "a-c", "a"))
     async def add_club(
@@ -300,6 +306,7 @@ class Subscriptions(commands.Cog):
         # Completion message
         await ctx.send(f"{Emoji.ok} Successfully added club channel!")
 
+    @commands.guild_only()
     @commands.has_role(StaffRoles.admin_role)
     @subscriptions_group.command(
         name="remove-club", aliases=("remove", "rm-c", "rmc", "rm")
