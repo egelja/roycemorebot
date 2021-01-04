@@ -1,6 +1,6 @@
 import asyncio
 import logging
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 
 from discord import Colour, Embed
 from discord.ext import commands
@@ -65,11 +65,18 @@ class Status(commands.Cog):
         await asyncio.sleep(delay)
 
         bot_log_channel = self.bot.get_channel(Channels.bot_log)
-        await bot_log_channel.send(f"{Emoji.warning} Restarting!")
-
-        log.info(
-            f"Restarting at the request of {ctx.message.author}"  # noqa: B950
+        embed = Embed(
+            description="Restarting!",
+            timestamp=datetime.now(tz=timezone(-timedelta(hours=6))),
+            color=Colour.gold(),
+        ).set_author(
+            name=self.bot.user.display_name,
+            url="https://github.com/NinoMaruszewski/roycemorebot/",
+            icon_url=self.bot.user.avatar_url_as(format="png"),
         )
+        await bot_log_channel.send(embed=embed)
+
+        log.info(f"Restarting at the request of {ctx.message.author}")  # noqa: B950
         await self.bot.logout()  # throws error on Windows, see https://bugs.python.org/issue39232
         # restarted by PM2
 

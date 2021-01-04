@@ -1,6 +1,6 @@
 import logging
 import os
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 
 import discord
 from discord.ext import commands
@@ -46,7 +46,16 @@ async def on_ready() -> None:
     log.info(f"Logged in as {bot.user}")
 
     channel = bot.get_channel(constants.Channels.bot_log)
-    await channel.send(f"{constants.Emoji.green_check} Connected!")
+    embed = discord.Embed(
+        description="Connected!",
+        timestamp=datetime.now(tz=timezone(-timedelta(hours=6))),
+        color=discord.Colour.green(),
+    ).set_author(
+        name=bot.user.display_name,
+        url="https://github.com/NinoMaruszewski/roycemorebot/",
+        icon_url=bot.user.avatar_url_as(format="png"),
+    )
+    await channel.send(embed=embed)
 
 
 # Load cogs
