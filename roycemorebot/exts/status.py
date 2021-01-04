@@ -49,7 +49,10 @@ class Status(commands.Cog):
         hours, rem = divmod(uptime.seconds, 3600)
         minutes, seconds = divmod(rem, 60)
         await ctx.send(
-            f"I've been online for {days} day{'s' if days != 1 else ''}, {hours} hour{'s' if hours != 1 else ''}, {minutes} minute{'s' if minutes != 1 else ''}, and {seconds} second{'s' if seconds != 1 else ''}."
+            f"I've been online for {days} day{'s' if days != 1 else ''}, "
+            f"{hours} hour{'s' if hours != 1 else ''}, "
+            f"{minutes} minute{'s' if minutes != 1 else ''}, "
+            f"and {seconds} second{'s' if seconds != 1 else ''}."
         )
 
     @commands.guild_only()
@@ -65,10 +68,10 @@ class Status(commands.Cog):
         await bot_log_channel.send(f"{Emoji.warning} Restarting!")
 
         log.info(
-            f"Restarting at the request of {ctx.message.author.name}#{ctx.message.author.discriminator}"  # noqa: B950
+            f"Restarting at the request of {ctx.message.author}"  # noqa: B950
         )
-        await self.bot.logout()
-        # restarted by PM2 now
+        await self.bot.logout()  # throws error on Windows, see https://bugs.python.org/issue39232
+        # restarted by PM2
 
     @restart.error
     async def restart_error(self, ctx: commands.Context, error: CommandError) -> None:

@@ -97,6 +97,14 @@ class Bot(metaclass=JSONGetter):
     bot_token: str
 
 
+class Guild(metaclass=JSONGetter):
+    """Attributes specific to the bot's guild."""
+
+    section = "guild"
+
+    guild_id: int
+
+
 class StaffRoles(metaclass=JSONGetter):
     """Roles from the guild of the bot."""
 
@@ -106,6 +114,7 @@ class StaffRoles(metaclass=JSONGetter):
     admin_role: int
     mod_role: int
     bot_team_role: int
+    muted_role: int
 
 
 class ClassRoles(metaclass=JSONGetter):
@@ -129,6 +138,16 @@ class Channels(metaclass=JSONGetter):
 
     roycemorebot_commands: int
     bot_log: int
+    mod_bot_commands: int
+
+
+class Categories(metaclass=JSONGetter):
+    """Categories in the bot's guild."""
+
+    section = "guild"
+    subsection = "categories"
+
+    clubs: int
 
 
 class Emoji(metaclass=JSONGetter):

@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 "discord.py" = "1.5.1"
 coloredlogs = "*"
+fuzzywuzzy = {extras = ["speedup"], version = "0.18.0"}
 
 [dev-packages]
 flake8 = "*"
