@@ -113,7 +113,8 @@ class Subscriptions(commands.Cog):
         for channel in clubs_category.channels:
             announcement_role = discord.utils.find(
                 lambda role: "Announcements" in role.name
-                and role.name.lower().startswith(channel.name),
+                and role.name.lower().startswith(channel.name)
+                and role.name.index(" ") == len(channel.name),  # prevents overlap
                 guild.roles,
             )
             log.trace(f"Channel: {channel.name}, role: {announcement_role}")
@@ -160,6 +161,35 @@ class Subscriptions(commands.Cog):
                 f"{ctx.author.mention}, there are no announcement roles with that name."
             )
 
+    @commands.command(aliases=("unsub",))
+    async def unsubscribe(self, ctx: commands.Context, announcement_name: str) -> None:
+        """Unsubscribe to an announcement role on the server."""
+        all_roles = list(self._announcement_roles.keys())
+        log.trace(f"All roles: {all_roles}")
+        match_info = process.extractOne(
+            announcement_name,
+            all_roles,
+            score_cutoff=75,
+        )
+        log.trace(f"Match info: {match_info}")
+        if match_info:
+            role = discord.utils.get(
+                ctx.guild.roles, id=self._announcement_roles[match_info[0]]["id"]
+            )
+            log.trace(f"Matched role `{role}` with probability {match_info[1]}")
+            await ctx.author.remove_roles(
+                role,
+                reason="User announcements unsubscription",
+            )
+            log.info(f"User {ctx.author} unsubscribed from {role}")
+            await ctx.send(
+                f"{ctx.author.mention}, you have successfully unsubscribed from {role}."
+            )
+        else:
+            await ctx.send(
+                f"{ctx.author.mention}, there are no announcement roles with that name."
+            )
+
     @commands.group(
         name="subscriptions", aliases=("subs",), invoke_without_command=True
     )
@@ -179,7 +209,7 @@ class Subscriptions(commands.Cog):
         all_subs = list(self._announcement_roles.keys())
         for subscription in all_subs:
             embed.add_field(
-                name=f"{subscription.title()} {'Club' if self._announcement_roles[subscription]['club'] else ''} Announcements",
+                name=f"{subscription.title()}{' Club' if self._announcement_roles[subscription]['club'] else ''} Announcements",
                 value=f"`?subscribe {subscription}`",
                 inline=True,
             )
@@ -219,11 +249,11 @@ class Subscriptions(commands.Cog):
 
         # Create the roles and assign them
         leader_role = await guild.create_role(
-            name=f"{name.title()} {'Club' if club else ''} {leader_title}",
+            name=f"{name.title()}{' Club' if club else ''} {leader_title}",
             reason="Club creation",
         )
         ann_role = await guild.create_role(
-            name=f"{name.title()} {'Club' if club else ''} Announcements",
+            name=f"{name.title()}{' Club' if club else ''} Announcements",
             reason="Club creation",
         )
         log.trace(f"Created {leader_role} and {ann_role} role")
