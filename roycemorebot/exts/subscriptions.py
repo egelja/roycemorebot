@@ -298,10 +298,12 @@ class Subscriptions(commands.Cog):
         # Create the roles and assign them
         leader_role = await guild.create_role(
             name=f"{name.title()}{' Club' if club else ''} {leader_title}",
+            mentionable=True,
             reason="Club creation",
         )
         ann_role = await guild.create_role(
             name=f"{name.title()}{' Club' if club else ''} Announcements",
+            mentionable=True,
             reason="Club creation",
         )
         log.trace(f"Created {leader_role} and {ann_role} role")
