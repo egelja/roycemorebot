@@ -1,18 +1,26 @@
 {
-    "apps":[{
-        "name":"RoycemoreBot",
-        "script":"roycemorebot",
+    "apps": [
+        {
+            "name": "RoycemoreBot",
+            "script": "roycemorebot",
 
-        "watch":"./roycemorebot",
-        "watch_delay":1000,
+            "watch": [
+                "./roycemorebot/",
+                ".env",
+                "config.json",
+                "config-default.json",
+                "ecosystem.config.json"
+            ],
+            "watch_delay": 1000,
 
-        "error_file":"/dev/null",
-        "out_file": "/dev/null",
+            "error_file": "/logs/err.log",
+            "out_file": "/dev/null",
 
-        "max_memory_restart": "300M",
-        "exp_backoff_restart_delay": 100,
+            "max_memory_restart": "300M",
+            "exp_backoff_restart_delay": 100,
 
-        "interpreter" : "pipenv",
-        "interpreter_args": "run python3 -m"
-    }]
+            "interpreter": "pipenv",
+            "interpreter_args": "run python3 -m"
+        }
+    ]
 }
