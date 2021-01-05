@@ -84,7 +84,7 @@ class JSONGetter(type):
 
 
 # Environment constants
-DEBUG_MODE = True if os.environ["DEBUG"] is not None else False
+DEBUG_MODE = True if os.environ["DEBUG"] is True else False
 
 
 # JSON constants
