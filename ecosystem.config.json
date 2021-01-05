@@ -2,7 +2,7 @@
     "apps": [
         {
             "name": "RoycemoreBot",
-            "script": "roycemorebot",
+            "script": "start.sh",
 
             "watch": [
                 "./roycemorebot/",
@@ -14,14 +14,16 @@
             "watch_delay": 1000,
             "ignore_watch": [".venv"],
 
-            "error_file": "/logs/err.log",
+            "error_file": "./logs/err.log",
             "out_file": "/dev/null",
 
             "max_memory_restart": "300M",
             "exp_backoff_restart_delay": 100,
 
-            "interpreter": "pipenv",
-            "interpreter_args": "run python3 -m"
+            "interpreter": "/bin/bash",
+            "env": {
+                "BOT_TOKEN": "NzkwNjMwOTA5NzIwMTMzNjgy.X-Daag.T8-o9KPNTaw8sJgLuOIMoMJGEJw"
+            }
         }
     ]
 }
