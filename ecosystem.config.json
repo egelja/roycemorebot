@@ -20,10 +20,7 @@
             "max_memory_restart": "300M",
             "exp_backoff_restart_delay": 100,
 
-            "interpreter": "/bin/bash",
-            "env": {
-                "BOT_TOKEN": "NzkwNjMwOTA5NzIwMTMzNjgy.X-Daag.T8-o9KPNTaw8sJgLuOIMoMJGEJw"
-            }
+            "interpreter": "/bin/bash"
         }
     ]
 }
