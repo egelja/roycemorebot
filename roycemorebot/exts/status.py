@@ -1,6 +1,6 @@
 import asyncio
 import logging
-from datetime import datetime, timedelta, timezone
+from datetime import datetime
 
 from discord import Colour, Embed
 from discord.ext import commands
@@ -67,7 +67,7 @@ class Status(commands.Cog):
         bot_log_channel = self.bot.get_channel(Channels.bot_log)
         embed = Embed(
             description="Restarting!",
-            timestamp=datetime.now(tz=timezone(-timedelta(hours=6))),
+            timestamp=datetime.now().astimezone(),
             color=Colour.gold(),
         ).set_author(
             name=self.bot.user.display_name,

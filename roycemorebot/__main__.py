@@ -1,6 +1,6 @@
 import logging
 import os
-from datetime import datetime, timedelta, timezone
+from datetime import datetime
 
 import discord
 from discord.ext import commands
@@ -45,10 +45,11 @@ async def on_ready() -> None:
     """Message that the bot is ready."""
     log.info(f"Logged in as {bot.user}")
 
+    log.trace(f"Time: {datetime.now()}")
     channel = bot.get_channel(constants.Channels.bot_log)
     embed = discord.Embed(
         description="Connected!",
-        timestamp=datetime.now(tz=timezone(-timedelta(hours=6))),
+        timestamp=datetime.now().astimezone(),
         color=discord.Colour.green(),
     ).set_author(
         name=bot.user.display_name,
