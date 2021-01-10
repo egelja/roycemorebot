@@ -181,7 +181,7 @@ class Subscriptions(commands.Cog):
 
     @commands.guild_only()
     @commands.command(aliases=("unsub",))
-    async def unsubscribe(self, ctx: commands.ssssssssss, announcement_name: str) -> None:
+    async def unsubscribe(self, ctx: commands.Context, announcement_name: str) -> None:
         """Unsubscribe to an announcement role on the server."""
         all_roles = list(self._announcement_roles.keys())
         log.trace(f"All roles: {all_roles}")
