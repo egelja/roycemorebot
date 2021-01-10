@@ -70,11 +70,11 @@ class Subscriptions(commands.Cog):
                     f"{Emoji.no} Announcement role reload canceled. Use `?subscriptions reload` to reload the announcement roles."
                 )
 
-    @commands.Cog.listener()
-    async def on_member_join(self, member: discord.Member) -> None:
-        """Give every new member to the server the `DJ` role."""
-        if not member.bot:
-            await member.add_roles(discord.Object(StaffRoles.dj_role), reason="Auto DJ-role")
+    # @commands.Cog.listener()
+    # async def on_member_join(self, member: discord.Member) -> None:
+    #     """Give every new member to the server the `DJ` role."""
+    #     if not member.bot:
+    #         await member.add_roles(discord.Object(StaffRoles.dj_role), reason="Auto DJ-role")
 
     @staticmethod
     def load_announcement_roles() -> "dict[str, dict[str, typing.Union[int, bool]]]":
@@ -181,7 +181,7 @@ class Subscriptions(commands.Cog):
 
     @commands.guild_only()
     @commands.command(aliases=("unsub",))
-    async def unsubscribe(self, ctx: commands.Context, announcement_name: str) -> None:
+    async def unsubscribe(self, ctx: commands.ssssssssss, announcement_name: str) -> None:
         """Unsubscribe to an announcement role on the server."""
         all_roles = list(self._announcement_roles.keys())
         log.trace(f"All roles: {all_roles}")

@@ -65,6 +65,11 @@ for file in os.listdir(os.path.join(".", "roycemorebot", "exts")):
         bot.load_extension(f"roycemorebot.exts.{file[:-3]}")
 
 
+# Log if debug mode is on
+log.info(f"Debug: {constants.DEBUG_MODE}")
+log.trace(f"Debug env variable: {os.environ['DEBUG']}")
+
+
 @commands.has_any_role(*constants.BOT_ADMINS)
 @bot.command(aliases=("r",))
 async def reload(ctx: commands.Context, cog: str) -> None:

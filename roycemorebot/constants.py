@@ -2,6 +2,7 @@ import json
 import logging
 import os
 from pathlib import Path
+from distutils.util import strtobool
 
 log = logging.getLogger(__name__)
 
@@ -83,8 +84,11 @@ class JSONGetter(type):
             yield name, getattr(cls, name)
 
 
-# Environment constants
-DEBUG_MODE = True if os.environ["DEBUG"] else False
+# Debug mode
+try:
+    DEBUG_MODE = strtobool(os.environ["DEBUG"])
+except ValueError:
+    DEBUG_MODE = False
 
 
 # JSON constants
