@@ -1,6 +1,6 @@
 {
     "bot": {
-        "prefix": "?",
+        "prefix": ",",
         "bot_token": "!ENV"
     },
     "guild": {
