@@ -76,8 +76,8 @@ class Status(commands.Cog):
         )
         await bot_log_channel.send(embed=embed)
 
-        log.info(f"Restarting at the request of {ctx.message.author}")  # noqa: B950
-        await self.bot.logout()  # throws error on Windows, see https://bugs.python.org/issue39232
+        log.info(f"Restarting at the request of {ctx.message.author}")
+        await self.bot.logout()  # error on Windows: https://bugs.python.org/issue39232
         # restarted by PM2
 
     @restart.error
@@ -85,7 +85,8 @@ class Status(commands.Cog):
         """Error handler for the restart command."""
         if isinstance(error, MissingAnyRole):
             await ctx.send(
-                f"""{Emoji.no} You do not have permissions to restart the bot. Ping `@Bot Team` if the bot isn't working properly."""  # noqa: B950
+                f"{Emoji.no} You do not have permissions to restart the bot. "
+                + "Ping `@Bot Team` if the bot isn't working properly."
             )
         elif isinstance(error, NoPrivateMessage):
             await ctx.send(f"{Emoji.no} You must be in a server to restart the bot.")

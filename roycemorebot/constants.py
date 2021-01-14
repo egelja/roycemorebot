@@ -1,8 +1,8 @@
 import json
 import logging
 import os
-from pathlib import Path
 from distutils.util import strtobool
+from pathlib import Path
 
 log = logging.getLogger(__name__)
 
@@ -17,7 +17,7 @@ else:
 
 class JSONGetter(type):
     """
-    Implements a custom metaclass used for accessing configuration data by simply accessing class attributes.
+    Implements a custom metaclass used for accessing configuration data by simply accessing class attributes.  # noqa: B950,D400
 
     Supports getting configuration from up to two levels
     of nested configuration through `section` and `subsection`.
@@ -71,7 +71,8 @@ class JSONGetter(type):
                 else (cls.section, name)
             )
             log.critical(
-                f"Tried accessing configuration variable at `{dotted_path}`, but it could not be found."
+                f"Tried accessing configuration variable at `{dotted_path}`, "
+                + "but it could not be found."
             )
             raise
 
@@ -79,7 +80,7 @@ class JSONGetter(type):
         return cls.__getattr__(name)
 
     def __iter__(cls):
-        """Return generator of key: value pairs of current constants class' config values."""
+        """Return generator of key: value pairs of current constants class' config values."""  # noqa: B950
         for name in cls.__annotations__:
             yield name, getattr(cls, name)
 

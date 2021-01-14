@@ -5,7 +5,7 @@
         "--max-complexity=10",
         "--select=A,ANN,B,C,D,E,EXE,F,I,N,W,B950"
     ],
-    "python.pythonPath": "C:\\Users\\ninom\\.virtualenvs\\roycemorebot-RLwp75uA\\Scripts\\python.exe",
+    "python.pythonPath": "C:\\Users\\ninom\\Desktop\\Programing\\BitBucket\\Python\\discord-bots\\roycemorebot\\.venv\\Scripts\\python.exe",
     "cSpell.words": [
         "roycemorebot"
     ]

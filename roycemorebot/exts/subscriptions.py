@@ -6,14 +6,15 @@ from pathlib import Path
 
 import discord
 from discord.ext import commands
+
 from fuzzywuzzy import process
 
 from roycemorebot.constants import (
-    MOD_ROLES,
     Categories,
     Channels,
     Emoji,
     Guild,
+    MOD_ROLES,
     StaffRoles,
 )
 
@@ -55,7 +56,8 @@ class Subscriptions(commands.Cog):
         except asyncio.TimeoutError:
             log.info("Reload timed out")
             await mod_bot_channel.send(
-                "Announcement role reload timeout. Use `?subscriptions reload` to reload the announcement roles."
+                "Announcement role reload timeout. Use `?subscriptions reload` "
+                + "to reload the announcement roles."
             )
         else:
             if str(reaction.emoji) == "✅":
@@ -67,14 +69,9 @@ class Subscriptions(commands.Cog):
             else:
                 log.info(f"Announcement role reload canceled by {user}")
                 await mod_bot_channel.send(
-                    f"{Emoji.no} Announcement role reload canceled. Use `?subscriptions reload` to reload the announcement roles."
+                    f"{Emoji.no} Announcement role reload canceled. Use "
+                    + "`?subscriptions reload` to reload the announcement roles."
                 )
-
-    # @commands.Cog.listener()
-    # async def on_member_join(self, member: discord.Member) -> None:
-    #     """Give every new member to the server the `DJ` role."""
-    #     if not member.bot:
-    #         await member.add_roles(discord.Object(StaffRoles.dj_role), reason="Auto DJ-role")
 
     @staticmethod
     def load_announcement_roles() -> "dict[str, dict[str, typing.Union[int, bool]]]":
@@ -144,6 +141,7 @@ class Subscriptions(commands.Cog):
             score_cutoff=75,
         )
         log.trace(f"Match info: {match_info}")
+        author_ping = ctx.author.mention
         if match_info:
             role = discord.utils.get(
                 ctx.guild.roles, id=self._announcement_roles[match_info[0]]["id"]
@@ -157,26 +155,26 @@ class Subscriptions(commands.Cog):
 
             if ctx.message.channel.id == Channels.roles:
                 await ctx.send(
-                    f"{ctx.author.mention}, you have successfully subscribed to {role}.",
+                    f"{author_ping}, you have successfully subscribed to {role}.",
                     delete_after=5.0,
                 )
                 await asyncio.sleep(5.0)
                 await ctx.message.delete()
             else:
                 await ctx.send(
-                    f"{ctx.author.mention}, you have successfully subscribed to {role}.",
+                    f"{author_ping}, you have successfully subscribed to {role}.",
                 )
         else:
             if ctx.message.channel.id == Channels.roles:
                 await ctx.send(
-                    f"{ctx.author.mention}, there are no announcement roles with that name.",
+                    f"{author_ping}, there are no announcement roles with that name.",
                     delete_after=5.0,
                 )
                 await asyncio.sleep(5.0)
                 await ctx.message.delete()
             else:
                 await ctx.send(
-                    f"{ctx.author.mention}, there are no announcement roles with that name."
+                    f"{author_ping}, there are no announcement roles with that name."
                 )
 
     @commands.guild_only()
@@ -191,6 +189,7 @@ class Subscriptions(commands.Cog):
             score_cutoff=75,
         )
         log.trace(f"Match info: {match_info}")
+        author_ping = ctx.author.mention
         if match_info:
             role = discord.utils.get(
                 ctx.guild.roles, id=self._announcement_roles[match_info[0]]["id"]
@@ -204,26 +203,26 @@ class Subscriptions(commands.Cog):
 
             if ctx.message.channel.id == Channels.roles:
                 await ctx.send(
-                    f"{ctx.author.mention}, you have successfully unsubscribed from {role}.",
+                    f"{author_ping}, you have successfully unsubscribed from {role}.",
                     delete_after=5.0,
                 )
                 await asyncio.sleep(5.0)
                 await ctx.message.delete()
             else:
                 await ctx.send(
-                    f"{ctx.author.mention}, you have successfully unsubscribed from {role}.",
+                    f"{author_ping}, you have successfully unsubscribed from {role}.",
                 )
         else:
             if ctx.message.channel.id == Channels.roles:
                 await ctx.send(
-                    f"{ctx.author.mention}, there are no announcement roles with that name.",
+                    f"{author_ping}, there are no announcement roles with that name.",
                     delete_after=5.0,
                 )
                 await asyncio.sleep(5.0)
                 await ctx.message.delete()
             else:
                 await ctx.send(
-                    f"{ctx.author.mention}, there are no announcement roles with that name."
+                    f"{author_ping}, there are no announcement roles with that name."
                 )
 
     @commands.guild_only()
@@ -237,17 +236,19 @@ class Subscriptions(commands.Cog):
     @commands.guild_only()
     @subscriptions_group.command(name="list", aliases=("l", "ls"))
     async def list_subscriptions(self, ctx: commands.Context) -> None:
-        """List all possible announcement subscriptions and their corresponding commands."""
+        """List all possible announcement subscriptions and their corresponding commands."""  # noqa: B950
         embed = discord.Embed(
             title="Announcement Subscriptions",
-            description="Here are all the possible announcement subscriptions and their commands.",
+            description="Here are all the possible announcement subscriptions and "
+            + "their commands.",
             color=discord.Colour.green(),
         )
 
         all_subs = list(self._announcement_roles.keys())
         for subscription in all_subs:
+            club = self._announcement_roles[subscription]["club"]
             embed.add_field(
-                name=f"{subscription.title()}{' Club' if self._announcement_roles[subscription]['club'] else ''} Announcements",
+                name=f"{subscription.title()}{' Club' if club else ''} Announcements",
                 value=f"`?subscribe {subscription}`",
                 inline=True,
             )
@@ -255,7 +256,7 @@ class Subscriptions(commands.Cog):
         if ctx.channel.id == Channels.roles:
             await ctx.send(
                 f"{ctx.author.mention}, please use a bot channel to run that command.",
-                delete_after=5.0
+                delete_after=5.0,
             )
             await asyncio.sleep(5.0)
             await ctx.message.delete()
@@ -292,7 +293,8 @@ class Subscriptions(commands.Cog):
             else None
         )
         log.info(
-            f"Name: {name}, leaders: {leader_names}, club: {club}, leader title: {leader_title}"
+            f"Name: {name}, leaders: {leader_names}, club: {club}, "
+            + f"leader title: {leader_title}"
         )
 
         # Create the roles and assign them
@@ -343,7 +345,8 @@ class Subscriptions(commands.Cog):
 
         # Load new announcement roles
         log.info(
-            f"Reloading announcement roles because of new announcement channel {channel_name}"
+            "Reloading announcement roles because of new announcement channel "
+            + channel_name
         )
         self._announcement_roles = self.reload_announcement_roles()
 
@@ -360,7 +363,8 @@ class Subscriptions(commands.Cog):
     ) -> None:
         """Delete a club channel and roles."""
         log.info(
-            f"Deleteing club channel {club_channel} and roles at the request of {ctx.author}"
+            f"Deleteing club channel {club_channel} and roles at the request of "
+            + f"{ctx.author}"
         )
         ann_role = discord.utils.get(
             ctx.guild.roles, id=self._announcement_roles[club_channel.name]["id"]

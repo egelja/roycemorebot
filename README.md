@@ -6,7 +6,7 @@
 <h3 align="center">Roycemore Bot</h3>
 
 <div align="center">
-  
+
 [![GitHub issues](https://img.shields.io/github/issues/NinoMaruszewski/roycemorebot?style=for-the-badge)](https://github.com/NinoMaruszewski/roycemorebot/issues/)
 [![GitHub pull requests](https://img.shields.io/github/issues-pr/NinoMaruszewski/roycemorebot?style=for-the-badge)](https://github.com/NinoMaruszewski/roycemorebot/pulls/)
 [![GitHub](https://img.shields.io/github/license/NinoMaruszewski/roycemorebot?style=for-the-badge)](./LICENSE)
