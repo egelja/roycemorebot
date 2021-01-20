@@ -1,27 +1,27 @@
 {
-    "apps": [
-        {
-            "name": "RoycemoreBot",
-            "script": "start.sh",
+  "apps": [
+    {
+      "name": "RoycemoreBot",
+      "script": "start.sh",
 
-            "watch": [
-                "./roycemorebot/",
-                ".env",
-                "config.json",
-                "config-default.json",
-                "ecosystem.config.json"
-            ],
-            "watch_delay": 1000,
-            "ignore_watch": [".venv"],
+      "watch": [
+        "./roycemorebot/",
+        ".env",
+        "config.json",
+        "config-default.json",
+        "ecosystem.config.json"
+      ],
+      "watch_delay": 1000,
+      "ignore_watch": [".venv"],
 
-            "error_file": "./logs/err.log",
-            "out_file": "/dev/null",
-            "time": true,
+      "error_file": "./logs/err.log",
+      "out_file": "/dev/null",
+      "time": true,
 
-            "max_memory_restart": "300M",
-            "exp_backoff_restart_delay": 100,
+      "max_memory_restart": "300M",
+      "exp_backoff_restart_delay": 100,
 
-            "interpreter": "/bin/bash"
-        }
-    ]
+      "interpreter": "/bin/bash"
+    }
+  ]
 }

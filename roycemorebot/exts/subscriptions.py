@@ -124,7 +124,7 @@ class Subscriptions(commands.Cog):
         save_file = Path("data", "announcement_roles.json")
         save_file.parent.mkdir(exist_ok=True)
         with save_file.open("w") as f:
-            json.dump(announcement_roles, f, indent=4)
+            json.dump(announcement_roles, f, indent=2)
 
         log.info("Announcement role reload finished")
         return announcement_roles

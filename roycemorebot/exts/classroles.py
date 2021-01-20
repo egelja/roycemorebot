@@ -5,9 +5,9 @@ import discord
 from discord.ext import commands
 
 from roycemorebot.checks import has_any_role_check, has_no_roles_check
-from roycemorebot.constants import CLASS_ROLES, MOD_ROLES
-from roycemorebot.constants import Channels, Emoji
+from roycemorebot.constants import CLASS_ROLES, Channels, MOD_ROLES
 from roycemorebot.constants import ClassRoles as CRoles
+from roycemorebot.constants import Emoji
 
 log = logging.getLogger(__name__)
 

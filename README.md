@@ -1,6 +1,7 @@
 <p align="center">
   <a href="https://github.com/NinoMaruszewski/roycemorebot" rel="noopener">
- <img width=200px height=200px src="https://i0.wp.com/roycemoreschool.org/wp-content/uploads/2019/03/cropped-Screen-Shot-2019-02-15-at-12.46.45-PM.png" alt="Project logo"></a>
+    <img width=200px height=200px src="https://i0.wp.com/roycemoreschool.org/wp-content/uploads/2019/03/cropped-Screen-Shot-2019-02-15-at-12.46.45-PM.png" alt="Project logo">
+    </a>
 </p>
 
 <h3 align="center">Roycemore Bot</h3>
@@ -15,8 +16,9 @@
 
 ---
 
-<p align="center"> A bot for the Roycemore Discord server.
-    <br>
+<p align="center">
+  A bot for the Roycemore Discord server.
+  <br>
 </p>
 
 ## Table of Contents
@@ -73,6 +75,7 @@ Linting:
 ```sh
 pipenv run lint
 ```
+
 ## Deployment <a name = "deployment"></a>
 
 You can use [PM2](https://pm2.keymetrics.io/) to deploy it. If you have a better solution, create an issue in the issue tracker.
