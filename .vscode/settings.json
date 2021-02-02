@@ -41,5 +41,6 @@
   "files.trimTrailingWhitespace": true,
   "python.analysis.completeFunctionParens": true,
   "files.insertFinalNewline": true,
-  "pythonIndent.trimLinesWithOnlyWhitespace": true
+  "pythonIndent.trimLinesWithOnlyWhitespace": true,
+  "githubIssues.issueBranchTitle": "${user}/${sanitizedIssueTitle}"
 }
