@@ -136,6 +136,17 @@ class ClassRoles(metaclass=JSONGetter):
     alumni: int
 
 
+class PronounRoles(metaclass=JSONGetter):
+    """Pronoun roles from the bot's guild."""
+
+    section = "guild"
+    subsection = "pronoun_roles"
+
+    he_him: int
+    she_her: int
+    they_them: int
+
+
 class Channels(metaclass=JSONGetter):
     """Channels from the guild of the bot."""
 
