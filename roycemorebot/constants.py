@@ -108,6 +108,7 @@ class Guild(metaclass=JSONGetter):
     section = "guild"
 
     guild_id: int
+    invite_link: str
 
 
 class StaffRoles(metaclass=JSONGetter):
@@ -171,6 +172,16 @@ class Categories(metaclass=JSONGetter):
     subsection = "categories"
 
     clubs: int
+
+
+class Messages(metaclass=JSONGetter):
+    """Links to important messages."""
+
+    section = "guild"
+    subsection = "messages"
+
+    welcome: str
+    roles: str
 
 
 class Emoji(metaclass=JSONGetter):

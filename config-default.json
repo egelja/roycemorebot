@@ -5,6 +5,7 @@
   },
   "guild": {
     "guild_id": 786307729966628903,
+    "invite_link": "https://discord.gg/vtuvs3Sa2s",
     "staff_roles": {
       "admin_role": 786312173667745812,
       "mod_role": 786309162828562474,
@@ -36,6 +37,10 @@
     },
     "categories": {
       "clubs": 786315836637970492
+    },
+    "messages": {
+      "welcome": "https://canary.discord.com/channels/786307729966628903/786307729966628905/801145115271102535",
+      "roles": "https://canary.discord.com/channels/786307729966628903/786314011666677770/787039891875561482"
     }
   },
   "style": {

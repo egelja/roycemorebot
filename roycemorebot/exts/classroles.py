@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import textwrap
 
 import discord
 from discord.ext import commands
@@ -7,9 +8,23 @@ from discord.ext import commands
 from roycemorebot.checks import has_any_role_check, has_no_roles_check
 from roycemorebot.constants import CLASS_ROLES, Channels, MOD_ROLES
 from roycemorebot.constants import ClassRoles as CRoles
-from roycemorebot.constants import Emoji
+from roycemorebot.constants import Emoji, Guild, Messages
 
 log = logging.getLogger(__name__)
+
+WELCOME_MESSAGE = textwrap.dedent(
+    f"""\
+    **__To get started:__**
+    - Read the rules if you didn't already.
+
+    - **Go to the [#roles]({Messages.roles}) channel** and get a Class Role.
+    *Note: __This is mandatory!__ Read Rule #6.*
+
+    - Server invite link is {Guild.invite_link}. Invite your friends!
+
+    All of this, and more, is described in [#welcome]({Messages.welcome}).
+    """
+)
 
 
 class ClassRoles(commands.Cog, name="Class Roles"):
@@ -17,6 +32,24 @@ class ClassRoles(commands.Cog, name="Class Roles"):
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
+
+    @commands.Cog.listener()
+    async def on_member_update(self, old: discord.Member, new: discord.Member) -> None:
+        """Send a welcome message to new members of the server."""
+        if old.pending and not new.pending:
+            # Someone has just verified, send them a welcome message!
+            embed = discord.Embed(
+                color=discord.Colour.green(),
+                description=WELCOME_MESSAGE,
+            ).set_author(
+                name="Welcome to the Roycemore Discord Server!",
+                icon_url=new.guild.icon_url,
+            )
+
+            log.trace(new.guild.icon_url)
+            log.info(f"Member {new} has just verified, sending them a welcome message!")
+
+            await new.send(embed=embed)
 
     async def _send_but_delete_in_roles(
         self, ctx: commands.Context, message: str
