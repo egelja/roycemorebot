@@ -129,6 +129,11 @@ class ClassRoles(metaclass=JSONGetter):
     section = "guild"
     subsection = "class_roles"
 
+    grade_5: int
+    grade_6: int
+    grade_7: int
+    grade_8: int
+
     freshmen: int
     sophomores: int
     juniors: int
@@ -184,6 +189,10 @@ class Emoji(metaclass=JSONGetter):
 BOT_ADMINS = [StaffRoles.bot_team_role, StaffRoles.admin_role]
 MOD_ROLES = [StaffRoles.mod_role, StaffRoles.admin_role]
 CLASS_ROLES = [
+    ClassRoles.grade_5,
+    ClassRoles.grade_6,
+    ClassRoles.grade_7,
+    ClassRoles.grade_8,
     ClassRoles.freshmen,
     ClassRoles.sophomores,
     ClassRoles.juniors,

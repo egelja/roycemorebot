@@ -92,6 +92,30 @@ class ClassRoles(commands.Cog, name="Class Roles"):
         log.trace(f"{user} has been moved from {old_role} to {new_role}")
 
     @commands.guild_only()
+    @commands.command(name="5th-grade", aliases=("5th", "5th-grader"))
+    async def grade_5(self, ctx: commands.Context, user: discord.Member = None) -> None:
+        """Give a freshman the `5th Grader` role."""
+        await self._add_class_role(ctx, user, CRoles.grade_5, "5th Graders")
+
+    @commands.guild_only()
+    @commands.command(name="6th-grade", aliases=("6th", "6th-grader"))
+    async def grade_6(self, ctx: commands.Context, user: discord.Member = None) -> None:
+        """Give a freshman the `6th Grader` role."""
+        await self._add_class_role(ctx, user, CRoles.grade_6, "6th Graders")
+
+    @commands.guild_only()
+    @commands.command(name="7th-grade", aliases=("7th", "7th-grader"))
+    async def grade_7(self, ctx: commands.Context, user: discord.Member = None) -> None:
+        """Give a freshman the `7th Grader` role."""
+        await self._add_class_role(ctx, user, CRoles.grade_7, "7th Graders")
+
+    @commands.guild_only()
+    @commands.command(name="8th-grade", aliases=("8th", "8th-grader"))
+    async def grade_8(self, ctx: commands.Context, user: discord.Member = None) -> None:
+        """Give a freshman the `8th Grader` role."""
+        await self._add_class_role(ctx, user, CRoles.grade_8, "8th Graders")
+
+    @commands.guild_only()
     @commands.command(aliases=("fm", "freshmen"))
     async def freshman(
         self, ctx: commands.Context, user: discord.Member = None
