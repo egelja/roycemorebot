@@ -85,10 +85,10 @@ class ClassRoles(commands.Cog, name="Class Roles"):
         """Move a class role up one."""
         await user.remove_roles(old_role, reason="Class Roles update.")
         await user.add_roles(new_role, reason="Class Roles update.")
-        await user.send(
-            f"Your grade level role has been changed to {new_role.name}. "
-            + "Have a great school year!"
-        )
+        # await user.send(
+        #     f"Your grade level role has been changed to {new_role.name}. "
+        #     + "Have a great school year!"
+        # )
         log.trace(f"{user} has been moved from {old_role} to {new_role}")
 
     @commands.guild_only()
@@ -186,10 +186,10 @@ class ClassRoles(commands.Cog, name="Class Roles"):
             elif seniors in member.roles:
                 await member.remove_roles(seniors, reason="Class Roles update.")
                 await member.add_roles(alumni, reason="Class Roles update.")
-                await member.send(
-                    f"Your grade level role has been changed to {alumni.name}. "
-                    + "Have fun in college!"
-                )
+                # await member.send(
+                #     f"Your grade level role has been changed to {alumni.name}. "
+                #     + "Have fun in college!"
+                # )
                 log.trace(f"{member} has been moved from {seniors} to {alumni}")
             else:
                 log.trace(
