@@ -151,13 +151,16 @@ class ClassRoles(commands.Cog, name="Class Roles"):
 
     @commands.guild_only()
     @commands.has_permissions(manage_roles=True)
-    @commands.command(
-        name="new-grade", aliases=("n-g", "ng", "new-school-year", "n-s-y", "nsy")
-    )
+    @commands.command(name="new-grade", aliases=("ng", "new-school-year"))
     async def new_grade(self, ctx: commands.Context) -> None:
         """Move everyone's grade level role up one."""
         log.info(f"Started role update at the request of {ctx.author}")
         # Make role IDs into objects for easier comparison:
+        grade_5 = ctx.guild.get_role(CRoles.grade_5)
+        grade_6 = ctx.guild.get_role(CRoles.grade_6)
+        grade_7 = ctx.guild.get_role(CRoles.grade_7)
+        grade_8 = ctx.guild.get_role(CRoles.grade_8)
+
         freshmen = ctx.guild.get_role(CRoles.freshmen)
         sophomores = ctx.guild.get_role(CRoles.sophomores)
         juniors = ctx.guild.get_role(CRoles.juniors)
@@ -166,7 +169,15 @@ class ClassRoles(commands.Cog, name="Class Roles"):
         log.trace(f"Freshmen role: {freshmen}")
 
         for member in ctx.guild.members:
-            if freshmen in member.roles:
+            if grade_5 in member.roles:
+                await self._update_class_role(member, grade_5, grade_6)
+            elif grade_6 in member.roles:
+                await self._update_class_role(member, grade_6, grade_7)
+            elif grade_7 in member.roles:
+                await self._update_class_role(member, grade_7, grade_8)
+            elif grade_8 in member.roles:
+                await self._update_class_role(member, grade_8, freshmen)
+            elif freshmen in member.roles:
                 await self._update_class_role(member, freshmen, sophomores)
             elif sophomores in member.roles:
                 await self._update_class_role(member, sophomores, juniors)
