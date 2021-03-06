@@ -18,69 +18,86 @@ class ClassRoles(commands.Cog, name="Class Roles"):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-    @commands.guild_only()
-    @commands.command(aliases=("fm", "freshmen"))
-    async def freshman(
-        self, ctx: commands.Context, user: discord.Member = None
+    async def _send_but_delete_in_roles(
+        self, ctx: commands.Context, message: str
     ) -> None:
-        """Give a freshman the `Freshmen` role."""
+        """Send a message, but if it's in #roles, delete it after 5 seconds."""
+        if ctx.message.channel.id == Channels.roles:
+            await ctx.send(message, delete_after=5.0)
+            await asyncio.sleep(5.0)
+            await ctx.message.delete()
+        else:
+            await ctx.send(message)
+
+    async def _add_class_role(
+        self, ctx: commands.Context, user: discord.Member, role: int, role_name: str
+    ) -> None:
+        """Give a user a class role."""
         # Default to the user being the author
         if user is None:
             user = ctx.author
         # Check if the user is not a mod and they tried to give someone else a role.
         if user != ctx.author and await has_no_roles_check(ctx, *MOD_ROLES):
-            await ctx.send("You cannot assign a user other than yourself a class role.")
+            await self._send_but_delete_in_roles(
+                ctx,
+                f"{Emoji.no} You cannot assign a user other than yourself a class "
+                + "role.",
+            )
             return
         elif user != ctx.author and await has_any_role_check(ctx, *MOD_ROLES):
             log.info(
                 f"Replacing {user}'s class roles at request of moderator {ctx.author}"
             )
-            for role in CLASS_ROLES:
+            for old_role in CLASS_ROLES:
                 await user.remove_roles(
-                    discord.Object(role),
-                    reason=f"Moderator {ctx.author} Replacing {user}'s Class Roles",
+                    discord.Object(old_role),
+                    reason=f"Moderator {ctx.author} replacing {user}'s Class Roles",
                 )
-            await user.add_roles(discord.Object(CRoles.freshmen), reason="Class Roles")
-            log.trace(f"Assigned {user} the Freshmen role")
-            await ctx.send(
-                f"{Emoji.ok} User `{user}` has been given the Freshmen role."
+            await user.add_roles(discord.Object(role), reason="Class Roles")
+            log.trace(f"Assigned {user} the {role_name} role")
+            await self._send_but_delete_in_roles(
+                f"{Emoji.ok} User `{user}` has been given the {role_name} role."
             )
             return
 
         # Check if the user is self-roleing and already has a class role.
         if user == ctx.author and await has_any_role_check(ctx, *CLASS_ROLES):
             modmail = discord.utils.get(ctx.guild.members, id=575252669443211264)
-            if ctx.message.channel.id == Channels.roles:
-                await ctx.send(
-                    f"{Emoji.no} You already have a class role. If you mistakenly "
-                    + f"assigned the wrong role, contact {modmail.mention}.",
-                    delete_after=5.0,
-                )
-                await asyncio.sleep(5.0)
-                await ctx.message.delete()
-            else:
-                await ctx.send(
-                    f"{Emoji.no} You already have a class role. If you mistakenly "
-                    + f"assigned the wrong role, contact {modmail.mention}.",
-                )
+            await self._send_but_delete_in_roles(
+                ctx,
+                f"{Emoji.no} You already have a class role. If you mistakenly "
+                + f"assigned the wrong role, contact {modmail.mention}.",
+            )
             return
 
-        await user.add_roles(discord.Object(CRoles.freshmen), reason="Class Roles")
-        log.info(f"Assigned {user} the Freshmen role")
+        await user.add_roles(discord.Object(role), reason="Class Roles")
+        log.info(f"Assigned {user} the {role_name} role")
 
-        if ctx.message.channel.id == Channels.roles:
-            await ctx.send(
-                f"{ctx.author.mention}, you have successfully been given the Freshmen "
-                + "role.",
-                delete_after=5.0,
-            )
-            await asyncio.sleep(5.0)
-            await ctx.message.delete()
-        else:
-            await ctx.send(
-                f"{ctx.author.mention}, you have successfully been given the Freshmen "
-                + "role.",
-            )
+        await self._send_but_delete_in_roles(
+            ctx,
+            f"{ctx.author.mention}, you have successfully been given the "
+            + f"{role_name} role.",
+        )
+
+    async def _update_class_role(
+        self, user: discord.Member, old_role: discord.Role, new_role: discord.Role
+    ) -> None:
+        """Move a class role up one."""
+        await user.remove_roles(old_role, reason="Class Roles update.")
+        await user.add_roles(new_role, reason="Class Roles update.")
+        await user.send(
+            f"Your grade level role has been changed to {new_role.name}. "
+            + "Have a great school year!"
+        )
+        log.trace(f"{user} has been moved from {old_role} to {new_role}")
+
+    @commands.guild_only()
+    @commands.command(aliases=("fm", "freshmen"))
+    async def freshman(
+        self, ctx: commands.Context, user: discord.Member = None
+    ) -> None:
+        """Give a freshman the `Freshmen` role."""
+        await self._add_class_role(ctx, user, CRoles.freshmen, "Freshmen")
 
     @commands.guild_only()
     @commands.command(aliases=("sm", "sophomores"))
@@ -88,241 +105,25 @@ class ClassRoles(commands.Cog, name="Class Roles"):
         self, ctx: commands.Context, user: discord.Member = None
     ) -> None:
         """Give a sophomore the `Sophomore` role."""
-        if user is None:
-            user = ctx.author
-
-        if user != ctx.author and await has_no_roles_check(ctx, *MOD_ROLES):
-            await ctx.send("You cannot assign a user other than yourself a class role.")
-            return
-        elif user != ctx.author and await has_any_role_check(ctx, *MOD_ROLES):
-            log.info(
-                f"Replacing {user}'s class roles at request of moderator {ctx.author}"
-            )
-            for role in CLASS_ROLES:
-                await user.remove_roles(
-                    discord.Object(role),
-                    reason=f"Moderator {ctx.author} Replacing {user}'s Class Roles",
-                )
-            await user.add_roles(
-                discord.Object(CRoles.sophomores), reason="Class Roles"
-            )
-            log.trace(f"Assigned {user} the Sophomores role")
-            await ctx.send(
-                f"{Emoji.ok} User `{user}` has been given the Sophomores role."
-            )
-            return
-
-        # Check if the user is self-roleing and already has a class role.
-        if user == ctx.author and await has_any_role_check(ctx, *CLASS_ROLES):
-            modmail = discord.utils.get(ctx.guild.members, id=575252669443211264)
-            if ctx.message.channel.id == Channels.roles:
-                await ctx.send(
-                    f"{Emoji.no} You already have a class role. If you mistakenly "
-                    + f"assigned the wrong role, contact {modmail.mention}.",
-                    delete_after=5.0,
-                )
-                await asyncio.sleep(5.0)
-                await ctx.message.delete()
-            else:
-                await ctx.send(
-                    f"{Emoji.no} You already have a class role. If you mistakenly "
-                    + f"assigned the wrong role, contact {modmail.mention}.",
-                )
-            return
-
-        await user.add_roles(discord.Object(CRoles.sophomores), reason="Class Roles")
-        log.info(f"Assigned {user} the Sophomores role")
-
-        if ctx.message.channel.id == Channels.roles:
-            await ctx.send(
-                f"{ctx.author.mention}, you have successfully been given the Sophomores"
-                + " role.",
-                delete_after=5.0,
-            )
-            await asyncio.sleep(5.0)
-            await ctx.message.delete()
-        else:
-            await ctx.send(
-                f"{ctx.author.mention}, you have successfully been given the Sophomores"
-                + " role.",
-            )
+        self._add_class_role(ctx, user, CRoles.sophomores, "Sophomores")
 
     @commands.guild_only()
     @commands.command(aliases=("jr", "juniors"))
     async def junior(self, ctx: commands.Context, user: discord.Member = None) -> None:
         """Give a junior the `Junior` role."""
-        if user is None:
-            user = ctx.author
-
-        if user != ctx.author and await has_no_roles_check(ctx, *MOD_ROLES):
-            await ctx.send("You cannot assign a user other than yourself a class role.")
-            return
-        elif user != ctx.author and await has_any_role_check(ctx, *MOD_ROLES):
-            log.info(
-                f"Replacing {user}'s class roles at request of moderator {ctx.author}"
-            )
-            for role in CLASS_ROLES:
-                await user.remove_roles(
-                    discord.Object(role),
-                    reason=f"Moderator {ctx.author} Replacing {user}'s Class Roles",
-                )
-            await user.add_roles(discord.Object(CRoles.juniors), reason="Class Roles")
-            log.trace(f"Assigned {user} the Juniors role")
-            await ctx.send(f"{Emoji.ok} User `{user}` has been given the Juniors role.")
-            return
-
-        # Check if the user is self-roleing and already has a class role.
-        if user == ctx.author and await has_any_role_check(ctx, *CLASS_ROLES):
-            modmail = discord.utils.get(ctx.guild.members, id=575252669443211264)
-            if ctx.message.channel.id == Channels.roles:
-                await ctx.send(
-                    f"{Emoji.no} You already have a class role. If you mistakenly "
-                    + f"assigned the wrong role, contact {modmail.mention}.",
-                    delete_after=5.0,
-                )
-                await asyncio.sleep(5.0)
-                await ctx.message.delete()
-            else:
-                await ctx.send(
-                    f"{Emoji.no} You already have a class role. If you mistakenly "
-                    + f"assigned the wrong role, contact {modmail.mention}.",
-                )
-            return
-
-        await user.add_roles(discord.Object(CRoles.juniors), reason="Class Roles")
-        log.info(f"Assigned {user} the Juniors role")
-
-        if ctx.message.channel.id == Channels.roles:
-            await ctx.send(
-                f"{ctx.author.mention}, you have successfully been given the Juniors "
-                + "role.",
-                delete_after=5.0,
-            )
-            await asyncio.sleep(5.0)
-            await ctx.message.delete()
-        else:
-            await ctx.send(
-                f"{ctx.author.mention}, you have successfully been given the Juniors "
-                + "role.",
-            )
+        self._add_class_role(ctx, user, CRoles.juniors, "Juniors")
 
     @commands.guild_only()
     @commands.command(aliases=("sr", "seniors"))
     async def senior(self, ctx: commands.Context, user: discord.Member = None) -> None:
         """Give a senior the `Senior` role."""
-        if user is None:
-            user = ctx.author
-
-        if user != ctx.author and await has_no_roles_check(ctx, *MOD_ROLES):
-            await ctx.send("You cannot assign a user other than yourself a class role.")
-            return
-        elif user != ctx.author and await has_any_role_check(ctx, *MOD_ROLES):
-            log.info(
-                f"Replacing {user}'s class roles at request of moderator {ctx.author}"
-            )
-            for role in CLASS_ROLES:
-                await user.remove_roles(
-                    discord.Object(role),
-                    reason=f"Moderator {ctx.author} Replacing {user}'s Class Roles",
-                )
-            await user.add_roles(discord.Object(CRoles.seniors), reason="Class Roles")
-            log.trace(f"Assigned {user} the Seniors role")
-            await ctx.send(f"{Emoji.ok} User `{user}` has been given the Seniors role.")
-            return
-
-        # Check if the user is self-roleing and already has a class role.
-        if user == ctx.author and await has_any_role_check(ctx, *CLASS_ROLES):
-            modmail = discord.utils.get(ctx.guild.members, id=575252669443211264)
-            if ctx.message.channel.id == Channels.roles:
-                await ctx.send(
-                    f"{Emoji.no} You already have a class role. If you mistakenly "
-                    + f"assigned the wrong role, contact {modmail.mention}.",
-                    delete_after=5.0,
-                )
-                await asyncio.sleep(5.0)
-                await ctx.message.delete()
-            else:
-                await ctx.send(
-                    f"{Emoji.no} You already have a class role. If you mistakenly "
-                    + f"assigned the wrong role, contact {modmail.mention}.",
-                )
-            return
-
-        await user.add_roles(discord.Object(CRoles.seniors), reason="Class Roles")
-        log.info(f"Assigned {user} the Seniors role")
-
-        if ctx.message.channel.id == Channels.roles:
-            await ctx.send(
-                f"{ctx.author.mention}, you have successfully been given the Seniors "
-                + "role.",
-                delete_after=5.0,
-            )
-            await asyncio.sleep(5.0)
-            await ctx.message.delete()
-        else:
-            await ctx.send(
-                f"{ctx.author.mention}, you have successfully been given the Seniors "
-                + "role.",
-            )
+        self._add_class_role(ctx, user, CRoles.seniors, "Seniors")
 
     @commands.guild_only()
     @commands.command(aliases=("al", "alumni"))
     async def alum(self, ctx: commands.Context, user: discord.Member = None) -> None:
         """Give a alum the `Alumni` role."""
-        if user is None:
-            user = ctx.author
-
-        if user != ctx.author and await has_no_roles_check(ctx, *MOD_ROLES):
-            await ctx.send("You cannot assign a user other than yourself a class role.")
-            return
-        elif user != ctx.author and await has_any_role_check(ctx, *MOD_ROLES):
-            log.info(
-                f"Replacing {user}'s class roles at request of moderator {ctx.author}"
-            )
-            for role in CLASS_ROLES:
-                await user.remove_roles(
-                    discord.Object(role),
-                    reason=f"Moderator {ctx.author} Replacing {user}'s Class Roles",
-                )
-            await user.add_roles(discord.Object(CRoles.alumni), reason="Class Roles")
-            log.trace(f"Assigned {user} the Alumni role")
-            await ctx.send(f"{Emoji.ok} User `{user}` has been given the Alumni role.")
-            return
-
-        # Check if the user is self-roleing and already has a class role.
-        if user == ctx.author and await has_any_role_check(ctx, *CLASS_ROLES):
-            modmail = discord.utils.get(ctx.guild.members, id=575252669443211264)
-            if ctx.message.channel.id == Channels.roles:
-                await ctx.send(
-                    f"{Emoji.no} You already have a class role. If you mistakenly "
-                    + f"assigned the wrong role, contact {modmail.mention}.",
-                    delete_after=5.0,
-                )
-                await asyncio.sleep(5.0)
-                await ctx.message.delete()
-            else:
-                await ctx.send(
-                    f"{Emoji.no} You already have a class role. If you mistakenly "
-                    + f"assigned the wrong role, contact {modmail.mention}.",
-                )
-            return
-
-        await user.add_roles(discord.Object(CRoles.alumni), reason="Class Roles")
-        log.info(f"Assigned {user} the Alumni role")
-
-        if ctx.message.channel.id == Channels.roles:
-            await ctx.send(
-                f"{ctx.author.mention}, you have successfully been given the Alumni "
-                + "role.",
-                delete_after=5.0,
-            )
-            await asyncio.sleep(5.0)
-            await ctx.message.delete()
-        else:
-            await ctx.send(
-                f"{ctx.author.mention}, you have successfully been given the Alumni "
-                + "role.",
-            )
+        self._add_class_role(ctx, user, CRoles.alumni, "Alumni")
 
     @commands.guild_only()
     @commands.has_permissions(manage_roles=True)
@@ -342,29 +143,11 @@ class ClassRoles(commands.Cog, name="Class Roles"):
 
         for member in ctx.guild.members:
             if freshmen in member.roles:
-                await member.remove_roles(freshmen, reason="Class Roles update.")
-                await member.add_roles(sophomores, reason="Class Roles update.")
-                await member.send(
-                    f"Your grade level role has been changed to {sophomores.name}. "
-                    + "Have a great school year!"
-                )
-                log.trace(f"{member} has been moved from {freshmen} to {sophomores}")
+                await self._update_class_role(member, freshmen, sophomores)
             elif sophomores in member.roles:
-                await member.remove_roles(sophomores, reason="Class Roles update.")
-                await member.add_roles(juniors, reason="Class Roles update.")
-                await member.send(
-                    f"Your grade level role has been changed to {juniors.name}. "
-                    + "Have a great school year!"
-                )
-                log.trace(f"{member} has been moved from {sophomores} to {juniors}")
+                await self._update_class_role(member, sophomores, juniors)
             elif juniors in member.roles:
-                await member.remove_roles(juniors, reason="Class Roles update.")
-                await member.add_roles(seniors, reason="Class Roles update.")
-                await member.send(
-                    f"Your grade level role has been changed to {seniors.name}. "
-                    + "Have a great school year!"
-                )
-                log.trace(f"{member} has been moved from {juniors} to {seniors}")
+                await self._update_class_role(member, juniors, seniors)
             elif seniors in member.roles:
                 await member.remove_roles(seniors, reason="Class Roles update.")
                 await member.add_roles(alumni, reason="Class Roles update.")
