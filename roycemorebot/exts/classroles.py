@@ -20,6 +20,10 @@ WELCOME_MESSAGE = textwrap.dedent(
     - **Go to the [#roles]({Messages.roles}) channel** and get a Class Role.
     *Note: __This is mandatory!__ Read Rule #6.*
 
+    - Set your nickname to your real name (`/nick NAME`) to help others identify you.
+
+    - To contact mods, DM ModMail#5460 or ping them if they are needed immediately.
+
     - Server invite link is {Guild.invite_link}. Invite your friends!
 
     All of this, and more, is described in [#welcome]({Messages.welcome}).
@@ -51,9 +55,8 @@ class ClassRoles(commands.Cog, name="Class Roles"):
 
             await new.send(embed=embed)
 
-    async def _send_but_delete_in_roles(
-        self, ctx: commands.Context, message: str
-    ) -> None:
+    @staticmethod
+    async def _send_but_delete_in_roles(ctx: commands.Context, message: str) -> None:
         """Send a message, but if it's in #roles, delete it after 5 seconds."""
         if ctx.message.channel.id == Channels.roles:
             await ctx.send(message, delete_after=5.0)
