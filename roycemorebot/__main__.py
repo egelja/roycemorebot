@@ -1,18 +1,32 @@
+import asyncio
 import logging
 import os
 import subprocess
 from datetime import datetime
 
-import discord
+from discord import Activity, ActivityType, Colour, Embed, Intents
 from discord.ext import commands
 
-from roycemorebot import constants
+from roycemorebot.constants import BOT_ADMINS, DEBUG_MODE
+from roycemorebot.constants import Bot as BotConsts
+from roycemorebot.constants import Channels, Emoji
 
 log = logging.getLogger("roycemorebot.main")
 
+try:
+    import uvloop
+except ImportError:
+    log.warning(
+        "Using the not-so-fast default asyncio event loop. Consider installing uvloop."
+    )
+    pass
+else:
+    log.info("Using the fast uvloop asyncio event loop")
+    asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
+
 
 # Change the bot class to log adding/removing cogs:
-class CogLoggingBot(commands.Bot):
+class Bot(commands.Bot):
     """Subclass of `discord.ext.commands.Bot` to log adding and removing cogs."""
 
     def add_cog(self, cog) -> None:  # noqa: ANN001
@@ -27,15 +41,13 @@ class CogLoggingBot(commands.Bot):
 
 
 # Create bot
-intents = discord.Intents.default()
+intents = Intents.default()
 intents.typing = False
 intents.members = True
-bot = CogLoggingBot(
-    command_prefix=constants.Bot.prefix,
+bot = Bot(
+    command_prefix=BotConsts.prefix,
     intents=intents,
-    activity=discord.Activity(
-        type=discord.ActivityType.watching, name=f"{constants.Bot.prefix}help"
-    ),
+    activity=Activity(type=ActivityType.watching, name=f"{BotConsts.prefix}help"),
 )
 bot.start_time = datetime.utcnow()
 
@@ -47,11 +59,11 @@ async def on_ready() -> None:
     log.info(f"Logged in as {bot.user}")
 
     log.trace(f"Time: {datetime.now()}")
-    channel = bot.get_channel(constants.Channels.bot_log)
-    embed = discord.Embed(
+    channel = bot.get_channel(Channels.bot_log)
+    embed = Embed(
         description="Connected!",
         timestamp=datetime.now().astimezone(),
-        color=discord.Colour.green(),
+        color=Colour.green(),
     ).set_author(
         name=bot.user.display_name,
         url="https://github.com/NinoMaruszewski/roycemorebot/",
@@ -67,11 +79,11 @@ for file in os.listdir(os.path.join(".", "roycemorebot", "exts")):
 
 
 # Log if debug mode is on
-log.info(f"Debug: {constants.DEBUG_MODE}")
+log.info(f"Debug: {DEBUG_MODE}")
 log.trace(f"Debug env variable: {os.environ['DEBUG']}")
 
 
-@commands.has_any_role(*constants.BOT_ADMINS)
+@commands.has_any_role(*BOT_ADMINS)
 @bot.command(aliases=("r",))
 async def reload(ctx: commands.Context, cog: str) -> None:
     """Reload a cog."""
@@ -85,7 +97,7 @@ async def reload(ctx: commands.Context, cog: str) -> None:
         await ctx.send(f"Cog `{cog}` successfully reloaded!")
 
 
-@commands.has_any_role(*constants.BOT_ADMINS)
+@commands.has_any_role(*BOT_ADMINS)
 @bot.command(name="git-pull", aliases=("gitpull", "gp"))
 async def git_pull(ctx: commands.Context) -> None:
     """Pull new changes."""
@@ -101,7 +113,7 @@ async def git_pull(ctx: commands.Context) -> None:
     except (subprocess.TimeoutExpired, subprocess.SubprocessError, OSError) as e:
         log.info(f"Command error! `{str(e)}`")
         await ctx.send(
-            f"{constants.Emoji.warning} There was an error trying to execute that "
+            f"{Emoji.warning} There was an error trying to execute that "
             + f"command:\n```\n{str(e)}\n```"
         )
 
@@ -114,9 +126,9 @@ async def git_pull(ctx: commands.Context) -> None:
             await ctx.send(f"Command output:\n```\n{e.stderr}\n```")
     else:
         # Command worked
-        await ctx.send(f"{constants.Emoji.green_check} Command executed successfully.")
+        await ctx.send(f"{Emoji.green_check} Command executed successfully.")
         if c.stdout:
             await ctx.send(f"Command output:\n```\n{c.stdout}\n```")
 
 
-bot.run(constants.Bot.bot_token)
+bot.run(BotConsts.bot_token)

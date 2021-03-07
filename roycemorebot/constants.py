@@ -1,18 +1,19 @@
-import json
 import logging
 import os
 from distutils.util import strtobool
 from pathlib import Path
+
+import rapidjson
 
 log = logging.getLogger(__name__)
 
 if Path("config.json").exists():
     log.info("Found `config.json`, loading constants from it.")
     with open("config.json", "r") as f:
-        _CONFIG_JSON = json.load(f)
+        _CONFIG_JSON = rapidjson.load(f)
 else:
     with open("config-default.json", "r") as f:
-        _CONFIG_JSON = json.load(f)
+        _CONFIG_JSON = rapidjson.load(f)
 
 
 class JSONGetter(type):
