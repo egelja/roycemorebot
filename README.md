@@ -84,6 +84,9 @@ You can use [PM2](https://pm2.keymetrics.io/) to deploy it. If you have a better
 
 - [Discord.py](https://discordpy.readthedocs.io/en/latest/) - Discord API interface
 - [SQLite3](https://sqlite.org/index.html) - Database
+- [Tortoise ORM](https://github.com/tortoise/tortoise-orm) - ORM
+- [FuzzyWuzzy](https://github.com/seatgeek/fuzzywuzzy) - Fuzzy string matching
+- [ColoredLogs](https://github.com/xolox/python-coloredlogs) - Colored bot logs
 
 ## Authors <a name = "authors"></a>
 

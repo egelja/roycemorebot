@@ -7,6 +7,7 @@ name = "pypi"
 "discord.py" = "~=1.6"
 coloredlogs = "*"
 fuzzywuzzy = {extras = ["speedup"], version = "0.18.0"}
+tortoise-orm = {version = "~=0.16", extras = ["accel"]}
 
 [dev-packages]
 flake8 = "*"
