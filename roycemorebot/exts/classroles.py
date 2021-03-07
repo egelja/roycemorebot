@@ -179,7 +179,7 @@ class ClassRoles(commands.Cog, name="Class Roles"):
     @commands.guild_only()
     @commands.command(aliases=("al", "alumni"))
     async def alum(self, ctx: commands.Context, user: discord.Member = None) -> None:
-        """Give a alum the `Alumni` role."""
+        """Give an alum the `Alumni` role."""
         self._add_class_role(ctx, user, CRoles.alumni, "Alumni")
 
     @commands.guild_only()
