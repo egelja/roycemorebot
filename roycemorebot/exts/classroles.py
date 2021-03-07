@@ -127,25 +127,25 @@ class ClassRoles(commands.Cog, name="Class Roles"):
     @commands.guild_only()
     @commands.command(name="5th-grade", aliases=("5th", "5th-grader"))
     async def grade_5(self, ctx: commands.Context, user: discord.Member = None) -> None:
-        """Give a freshman the `5th Grader` role."""
+        """Give a 5th Grader the `5th Graders` role."""
         await self._add_class_role(ctx, user, CRoles.grade_5, "5th Graders")
 
     @commands.guild_only()
     @commands.command(name="6th-grade", aliases=("6th", "6th-grader"))
     async def grade_6(self, ctx: commands.Context, user: discord.Member = None) -> None:
-        """Give a freshman the `6th Grader` role."""
+        """Give a 6th Grader the `6th Graders` role."""
         await self._add_class_role(ctx, user, CRoles.grade_6, "6th Graders")
 
     @commands.guild_only()
     @commands.command(name="7th-grade", aliases=("7th", "7th-grader"))
     async def grade_7(self, ctx: commands.Context, user: discord.Member = None) -> None:
-        """Give a freshman the `7th Grader` role."""
+        """Give a 7th Grader the `7th Graders` role."""
         await self._add_class_role(ctx, user, CRoles.grade_7, "7th Graders")
 
     @commands.guild_only()
     @commands.command(name="8th-grade", aliases=("8th", "8th-grader"))
     async def grade_8(self, ctx: commands.Context, user: discord.Member = None) -> None:
-        """Give a freshman the `8th Grader` role."""
+        """Give an 8th Grader the `8th Graders` role."""
         await self._add_class_role(ctx, user, CRoles.grade_8, "8th Graders")
 
     @commands.guild_only()
