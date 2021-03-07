@@ -5,6 +5,7 @@
   },
   "guild": {
     "guild_id": 786307729966628903,
+    "invite_link": "https://discord.gg/vtuvs3Sa2s",
     "staff_roles": {
       "admin_role": 786312173667745812,
       "mod_role": 786309162828562474,
@@ -13,6 +14,10 @@
       "dj_role": 797662237480321045
     },
     "class_roles": {
+      "grade_5": 817218817255276600,
+      "grade_6": 817218705750228993,
+      "grade_7": 817218553068650526,
+      "grade_8": 817218443019419699,
       "freshmen": 786314158445559878,
       "sophomores": 786314187625857044,
       "juniors": 786314208098254888,
@@ -32,6 +37,10 @@
     },
     "categories": {
       "clubs": 786315836637970492
+    },
+    "messages": {
+      "welcome": "https://canary.discord.com/channels/786307729966628903/786307729966628905/801145115271102535",
+      "roles": "https://canary.discord.com/channels/786307729966628903/786314011666677770/787039891875561482"
     }
   },
   "style": {

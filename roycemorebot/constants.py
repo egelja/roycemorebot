@@ -108,6 +108,7 @@ class Guild(metaclass=JSONGetter):
     section = "guild"
 
     guild_id: int
+    invite_link: str
 
 
 class StaffRoles(metaclass=JSONGetter):
@@ -128,6 +129,11 @@ class ClassRoles(metaclass=JSONGetter):
 
     section = "guild"
     subsection = "class_roles"
+
+    grade_5: int
+    grade_6: int
+    grade_7: int
+    grade_8: int
 
     freshmen: int
     sophomores: int
@@ -168,6 +174,16 @@ class Categories(metaclass=JSONGetter):
     clubs: int
 
 
+class Messages(metaclass=JSONGetter):
+    """Links to important messages."""
+
+    section = "guild"
+    subsection = "messages"
+
+    welcome: str
+    roles: str
+
+
 class Emoji(metaclass=JSONGetter):
     """Emojis that the bot will use."""
 
@@ -184,6 +200,10 @@ class Emoji(metaclass=JSONGetter):
 BOT_ADMINS = [StaffRoles.bot_team_role, StaffRoles.admin_role]
 MOD_ROLES = [StaffRoles.mod_role, StaffRoles.admin_role]
 CLASS_ROLES = [
+    ClassRoles.grade_5,
+    ClassRoles.grade_6,
+    ClassRoles.grade_7,
+    ClassRoles.grade_8,
     ClassRoles.freshmen,
     ClassRoles.sophomores,
     ClassRoles.juniors,
