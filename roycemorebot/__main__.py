@@ -2,6 +2,7 @@ import asyncio
 import logging
 import os
 import subprocess
+import sys
 from datetime import datetime
 
 from discord import Activity, ActivityType, Colour, Embed, Intents
@@ -10,6 +11,9 @@ from discord.ext import commands
 from roycemorebot.constants import BOT_ADMINS, DEBUG_MODE
 from roycemorebot.constants import Bot as BotConsts
 from roycemorebot.constants import Channels, Emoji
+
+from tortoise import Tortoise
+from tortoise.exceptions import ConfigurationError
 
 log = logging.getLogger("roycemorebot.main")
 
@@ -25,9 +29,31 @@ else:
     asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 
 
+async def init_db() -> None:
+    """Create the database."""
+    await Tortoise.init(
+        db_url="sqlite://db.sqlite3",
+        modules={"models": ["roycemorebot.models"]},
+        use_tz=True,
+    )
+    # Generate the schema
+    await Tortoise.generate_schemas()
+
+
 # Change the bot class to log adding/removing cogs:
 class Bot(commands.Bot):
-    """Subclass of `discord.ext.commands.Bot` to log adding and removing cogs."""
+    """Subclass of `discord.ext.commands.Bot` with additional functionality."""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # Create the database
+        loop = asyncio.get_event_loop()
+        try:
+            loop.run_until_complete(init_db())
+        except (OSError, ConfigurationError) as e:
+            log.error(f"Error initialing database: {e}")
+            sys.exit()
 
     def add_cog(self, cog) -> None:  # noqa: ANN001
         """Add a cog and log it."""
@@ -38,6 +64,18 @@ class Bot(commands.Bot):
         """Remove a cog and log it."""
         super().remove_cog(name)
         log.info(f"Cog unloaded: {name}")
+
+    async def close(self) -> None:
+        """Close the bot and database session."""
+        await super().close()
+
+        # Close the db
+        await Tortoise.close_connections()
+
+        # Prevents error on windows
+        log.warning("Please wait, just cleaning up a bit more")
+        await asyncio.get_event_loop().shutdown_asyncgens()
+        await asyncio.sleep(2)
 
 
 # Create bot
