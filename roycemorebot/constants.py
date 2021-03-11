@@ -97,7 +97,7 @@ TORTOISE_ORM = {
     "connections": {"default": "sqlite://db.sqlite3"},
     "apps": {
         "roycemorebot": {
-            "models": ["roycemorebot.models", "aerich.models"],
+            "models": ["roycemorebot.db.models", "aerich.models"],
             "default_connection": "default",
         }
     },
