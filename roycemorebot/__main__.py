@@ -8,7 +8,7 @@ from datetime import datetime
 from discord import Activity, ActivityType, Colour, Embed, Intents
 from discord.ext import commands
 
-from roycemorebot.constants import BOT_ADMINS, DEBUG_MODE
+from roycemorebot.constants import BOT_ADMINS, DEBUG_MODE, TORTOISE_ORM
 from roycemorebot.constants import Bot as BotConsts
 from roycemorebot.constants import Channels, Emoji
 
@@ -31,11 +31,7 @@ else:
 
 async def init_db() -> None:
     """Create the database."""
-    await Tortoise.init(
-        db_url="sqlite://db.sqlite3",
-        modules={"models": ["roycemorebot.models"]},
-        use_tz=True,
-    )
+    await Tortoise.init(TORTOISE_ORM)
     # Generate the schema
     await Tortoise.generate_schemas()
 
@@ -52,7 +48,10 @@ class Bot(commands.Bot):
         try:
             loop.run_until_complete(init_db())
         except (OSError, ConfigurationError) as e:
-            log.error(f"Error initialing database: {e}")
+            log.critical(f"Error initialing database: {e}")
+            asyncio.set_event_loop(None)
+            loop.stop()
+            loop.close()
             sys.exit()
 
     def add_cog(self, cog) -> None:  # noqa: ANN001

@@ -92,6 +92,18 @@ try:
 except ValueError:
     DEBUG_MODE = False
 
+# Tortoise config
+TORTOISE_ORM = {
+    "connections": {"default": "sqlite://db.sqlite3"},
+    "apps": {
+        "roycemorebot": {
+            "models": ["roycemorebot.models", "aerich.models"],
+            "default_connection": "default",
+        }
+    },
+    "use_tz": True,
+}
+
 
 # JSON constants
 class Bot(metaclass=JSONGetter):
