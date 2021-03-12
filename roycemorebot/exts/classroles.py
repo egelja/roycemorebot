@@ -165,25 +165,25 @@ class ClassRoles(commands.Cog, name="Class Roles"):
         self, ctx: commands.Context, user: discord.Member = None
     ) -> None:
         """Give a sophomore the `Sophomore` role."""
-        self._add_class_role(ctx, user, CRoles.sophomores, "Sophomores")
+        await self._add_class_role(ctx, user, CRoles.sophomores, "Sophomores")
 
     @commands.guild_only()
     @commands.command(aliases=("jr", "juniors"))
     async def junior(self, ctx: commands.Context, user: discord.Member = None) -> None:
         """Give a junior the `Junior` role."""
-        self._add_class_role(ctx, user, CRoles.juniors, "Juniors")
+        await self._add_class_role(ctx, user, CRoles.juniors, "Juniors")
 
     @commands.guild_only()
     @commands.command(aliases=("sr", "seniors"))
     async def senior(self, ctx: commands.Context, user: discord.Member = None) -> None:
         """Give a senior the `Senior` role."""
-        self._add_class_role(ctx, user, CRoles.seniors, "Seniors")
+        await self._add_class_role(ctx, user, CRoles.seniors, "Seniors")
 
     @commands.guild_only()
     @commands.command(aliases=("al", "alumni"))
     async def alum(self, ctx: commands.Context, user: discord.Member = None) -> None:
         """Give an alum the `Alumni` role."""
-        self._add_class_role(ctx, user, CRoles.alumni, "Alumni")
+        await self._add_class_role(ctx, user, CRoles.alumni, "Alumni")
 
     @commands.guild_only()
     @commands.has_permissions(manage_roles=True)
