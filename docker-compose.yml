@@ -1,0 +1,30 @@
+version: "3.9"
+services:
+  postgres:
+    image: postgres:13-alpine
+    restart: always
+    environment:
+      POSTGRES_DB: RoycemoreBotDB
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_USER: test
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  bot:
+    build: .
+    restart: always
+    volumes:
+      - ./logs:/bot/logs
+      - .:/bot:ro
+    tty: true
+    depends_on:
+      - postgres
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgres://test:1234@postgres:5432/RoycemoreBotDB
+
+volumes:
+  pgdata:

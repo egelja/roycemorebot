@@ -94,7 +94,7 @@ except ValueError:
 
 # Tortoise config
 TORTOISE_ORM = {
-    "connections": {"default": "sqlite://db.sqlite3"},
+    "connections": {"default": os.environ["DATABASE_URL"]},
     "apps": {
         "roycemorebot": {
             "models": ["roycemorebot.db.models", "aerich.models"],
