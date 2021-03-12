@@ -2,7 +2,7 @@ import asyncio
 import logging
 import os
 import subprocess
-import sys
+from contextlib import suppress
 from datetime import datetime
 
 from discord import Activity, ActivityType, Colour, Embed, Intents
@@ -49,10 +49,7 @@ class Bot(commands.Bot):
             loop.run_until_complete(init_db())
         except (OSError, ConfigurationError) as e:
             log.critical(f"Error initialing database: {e}")
-            asyncio.set_event_loop(None)
-            loop.stop()
-            loop.close()
-            sys.exit()
+            loop.run_until_complete(self.close())
 
     def add_cog(self, cog) -> None:  # noqa: ANN001
         """Add a cog and log it."""
@@ -66,6 +63,16 @@ class Bot(commands.Bot):
 
     async def close(self) -> None:
         """Close the bot and database session."""
+        # Done before super().close() to allow tasks to finish
+        for ext in list(self.extensions):
+            with suppress(Exception):
+                self.unload_extension(ext)
+
+        for cog in list(self.cogs):
+            with suppress(Exception):
+                self.remove_cog(cog)
+
+        # Now close the bot
         await super().close()
 
         # Close the db
