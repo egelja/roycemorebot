@@ -92,7 +92,7 @@ class ClassRoles(commands.Cog, name="Class Roles"):
             await user.add_roles(discord.Object(role), reason="Class Roles")
             log.trace(f"Assigned {user} the {role_name} role")
             await self._send_but_delete_in_roles(
-                f"{Emoji.ok} User `{user}` has been given the {role_name} role."
+                ctx, f"{Emoji.ok} User `{user}` has been given the {role_name} role."
             )
             return
 
