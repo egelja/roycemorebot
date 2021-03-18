@@ -5,8 +5,8 @@ services:
     restart: always
     environment:
       POSTGRES_DB: RoycemoreBotDB
-      POSTGRES_PASSWORD: 1234
-      POSTGRES_USER: test
+      POSTGRES_PASSWORD: Griffin1
+      POSTGRES_USER: RoycemoreBot
     ports:
       - "5432:5432"
     volumes:
@@ -24,7 +24,7 @@ services:
     env_file:
       - .env
     environment:
-      DATABASE_URL: postgres://test:1234@postgres:5432/RoycemoreBotDB
+      DATABASE_URL: postgres://RoycemoreBot:Griffin1@postgres:5432/RoycemoreBotDB
 
 volumes:
   pgdata:

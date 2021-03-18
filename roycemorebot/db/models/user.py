@@ -1,14 +1,9 @@
+from roycemorebot.db.fields import ArrayField
+from roycemorebot.db.mixins import TimestampMixin
 from roycemorebot.db.validators import MaxValueValidator, MinValueValidator
 
 from tortoise import fields
 from tortoise.models import Model
-
-
-class TimestampMixin:
-    """Adds timestamps to database models."""
-
-    created_at = fields.DatetimeField(null=True, auto_now_add=True)
-    modified_at = fields.DatetimeField(null=True, auto_now=True)
 
 
 class User(Model, TimestampMixin):
@@ -29,6 +24,17 @@ class User(Model, TimestampMixin):
         ),
         description="The discriminator of the user from Discord.",
     )
+    roles = ArrayField(
+        fields.BigIntField(
+            validators=(MinValueValidator(0, "Role ID"),),
+        ),
+        null=True,
+        description="The roles of the user from Discord."
+    )
+    in_guild = fields.BooleanField(
+        default=True,
+        description="If the user in in the server."
+    )
 
     class Meta:
         """Metadata for the model."""
@@ -36,18 +42,4 @@ class User(Model, TimestampMixin):
         table = "users"
 
     def __str__(self):
-        return self.name
-
-
-class Infraction(Model, TimestampMixin):
-    """Database model for an infraction."""
-
-    user_id = fields.BigIntField()
-
-    class Meta:
-        """Metadata for the model."""
-
-        table = "infractions"
-
-    def __str__(self):
-        return self.name
+        return f"{self.name}#{self.discriminator:04d}"
