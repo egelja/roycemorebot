@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://github.com/NinoMaruszewski/roycemorebot" rel="noopener">
+  <a href="https://github.com/MrAwesomeRocks/roycemorebot" rel="noopener">
     <img width=200px height=200px src="https://i0.wp.com/roycemoreschool.org/wp-content/uploads/2019/03/cropped-Screen-Shot-2019-02-15-at-12.46.45-PM.png" alt="Project logo">
     </a>
 </p>
@@ -8,9 +8,9 @@
 
 <div align="center">
 
-[![GitHub issues](https://img.shields.io/github/issues/NinoMaruszewski/roycemorebot?style=for-the-badge)](https://github.com/NinoMaruszewski/roycemorebot/issues/)
-[![GitHub pull requests](https://img.shields.io/github/issues-pr/NinoMaruszewski/roycemorebot?style=for-the-badge)](https://github.com/NinoMaruszewski/roycemorebot/pulls/)
-[![GitHub](https://img.shields.io/github/license/NinoMaruszewski/roycemorebot?style=for-the-badge)](./LICENSE)
+[![GitHub issues](https://img.shields.io/github/issues/MrAwesomeRocks/roycemorebot?style=for-the-badge)](https://github.com/MrAwesomeRocks/roycemorebot/issues/)
+[![GitHub pull requests](https://img.shields.io/github/issues-pr/MrAwesomeRocks/roycemorebot?style=for-the-badge)](https://github.com/MrAwesomeRocks/roycemorebot/pulls/)
+[![GitHub](https://img.shields.io/github/license/MrAwesomeRocks/roycemorebot?style=for-the-badge)](./LICENSE)
 
 </div>
 
@@ -87,4 +87,4 @@ You can use [PM2](https://pm2.keymetrics.io/) to deploy it. If you have a better
 
 ## Authors <a name = "authors"></a>
 
-- [@NinoMaruszewski](https://github.com/NinoMaruszewski/) - Idea & Initial work
+- [@MrAwesomeRocks](https://github.com/MrAwesomeRocks/) - Idea & Initial work

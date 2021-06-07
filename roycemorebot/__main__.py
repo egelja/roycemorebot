@@ -54,7 +54,7 @@ async def on_ready() -> None:
         color=discord.Colour.green(),
     ).set_author(
         name=bot.user.display_name,
-        url="https://github.com/NinoMaruszewski/roycemorebot/",
+        url="https://github.com/MrAwesomeRocks/roycemorebot/",
         icon_url=bot.user.avatar_url_as(format="png"),
     )
     await channel.send(embed=embed)
