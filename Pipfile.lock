@@ -346,11 +346,11 @@
         },
         "flake8-tidy-imports": {
             "hashes": [
-                "sha256:27a6b3c2dcfdb4180eeac632a28d48513394b6a399ee6e3064df53ffcee5ea94",
-                "sha256:b6902bbd4d1eae7f2070447d6aaa5e593c2c7f016c70dcef860e8d65e8f0457f"
+                "sha256:631a1ba9daaedbe8bb53f6086c5a92b390e98371205259e0e311a378df8c3dc8",
+                "sha256:c18b3351b998787db071e766e318da1f0bd9d5cecc69c4022a69e7aa2efb2c51"
             ],
             "index": "pypi",
-            "version": "==4.4.0"
+            "version": "==4.4.1"
         },
         "identify": {
             "hashes": [
